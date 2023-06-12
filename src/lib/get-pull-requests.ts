@@ -85,6 +85,8 @@ export const getPullRequests = async (githubAccessToken: string, repoOwner: stri
     owner: 'OWNER',
     repo: 'REPO',
     headers: HEADERS,
+    // By default this only shows open PRs
+    state: 'all',
   });
 
   if (response.status !== OK) {

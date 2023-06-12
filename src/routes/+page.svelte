@@ -120,7 +120,6 @@
         <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
         <div class="rewards">
-          <textarea>{stringify(pullRequests)}</textarea>
           {#each mergedPullRequests as mergedPullRequest}
             <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
           {/each}
