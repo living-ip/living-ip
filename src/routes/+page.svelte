@@ -10,7 +10,7 @@
   import RewardSummary from '../components/RewardSummary.svelte';
   import Reward from '../components/Reward.svelte';
   import PullRequest from '../components/PullRequest.svelte';
-  import { log } from '../lib/functions';
+  import { log, stringify } from '../lib/functions';
   import { getTotalValue } from '../lib/utils';
   const appName = `decentralized IP`;
 
@@ -23,7 +23,9 @@
   let repoOwner: string | null = null;
   let repo: string | null = null;
 
-  // TODO: store in DB (or in the blockchain)
+  // TODO: store in DB or in the blockchain, or in a config file
+  // This will need to be all users on a project, not just the current user
+  // Since people will vote on other people's proposals
   const walletAddressByGithubUser = {
     mikemaccana: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
   };
@@ -80,11 +82,9 @@
     await updateFromGithub();
   });
 
-  const refreshProject = async () => {
+  const refreshRepo = async () => {
     await updateFromGithub();
   };
-
-  const projectName = `demo-repository`;
 </script>
 
 <header>
@@ -113,13 +113,14 @@
     <p>Loading Project</p>
   {:else}
     <div class="title-and-refresh">
-      <title class="app-name">{projectName}</title><button class="refresh" on:click={refreshProject} />
+      <title class="app-name">{repo}</title><button class="refresh" on:click={refreshRepo} />
     </div>
     <div class="reward-summary-and-proposals">
       <section class="rewards">
         <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
         <div class="rewards">
+          <textarea>{stringify(pullRequests)}</textarea>
           {#each mergedPullRequests as mergedPullRequest}
             <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
           {/each}
@@ -137,6 +138,7 @@
               {walletAddressByGithubUser}
               {walletNameByWalletAddress}
               tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
+              symbol={SYMBOL}
             />
           {/each}
           <div />
