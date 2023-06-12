@@ -6,6 +6,7 @@
   export let walletAddressByGithubUser: Record<string, string>;
   export let walletNameByWalletAddress: Record<string, string>;
   export let tokenRewardPerValueUnit: number;
+  export let symbol: string;
 
   // TODO: store in the DB (or in the blockchain)
   let voteCount: 3;
@@ -23,7 +24,7 @@
   </div>
   <div class="name">{pullRequest.title}</div>
   <div class="reward">
-    Reward: {pullRequest.value * tokenRewardPerValueUnit}
+    Reward: <strong>{pullRequest.value * tokenRewardPerValueUnit} {symbol}</strong>
   </div>
   <ProgressBar {voteCount} {votesRequired} />
 </div>
@@ -56,5 +57,6 @@
   .reward {
     font-size: 12px;
     line-height: 16px;
+    grid-auto-flow: column;
   }
 </style>
