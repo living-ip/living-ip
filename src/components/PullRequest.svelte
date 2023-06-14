@@ -22,7 +22,11 @@
     <div class="profile-picture" />
     <div class="wallet-name">{walletName || walletAddress}</div>
   </div>
-  <div class="name">{pullRequest.title}</div>
+  <div class="name">
+    <a href={`${pullRequest.htmlURL}/files`} target="_blank">
+      {pullRequest.title}
+    </a>
+  </div>
   <div class="reward">
     Contribution: <strong>{pullRequest.value * tokenRewardPerValueUnit} {symbol}</strong>
   </div>
