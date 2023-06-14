@@ -8,6 +8,7 @@
   import type { SummarizedPullRequest } from '../types/types';
   import { onMount } from 'svelte';
   import RewardSummary from '../components/RewardSummary.svelte';
+  import Leaderboard from '../components/Leaderboard.svelte';
   import Reward from '../components/Reward.svelte';
   import PullRequest from '../components/PullRequest.svelte';
   import { log, stringify } from '../lib/functions';
@@ -23,9 +24,13 @@
   let repoOwner: string | null = null;
   let repo: string | null = null;
 
-  // TODO: store in DB or in the blockchain, or in a config file
-  // This will need to be all users on a project, not just the current user
-  // Since people will vote on other people's proposals
+  // TODO: after a user authenticates to Github, save this is a DB
+  // maybe a Users collection
+  const userDocument = {
+    walletAddress: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
+    githubUsername: 'mikemaccana',
+    walletName: 'mikemaccana.sol',
+  };
   const walletAddressByGithubUser = {
     mikemaccana: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
     m3taversal: 'BQbg5NeqmkexvA7XpjPqTh1Es1RTdVTsAjCgGYviHQUp',
@@ -87,6 +92,13 @@
   const refreshRepo = async () => {
     await updateFromGithub();
   };
+
+  const getIndexOfTab = (tabName: string) => {
+    return tabs.findIndex(tab => tab === tabName);
+  };
+
+  const tabs = ['Voting', 'Leaderboard'];
+  let currentTab = 1;
 </script>
 
 <header>
@@ -100,7 +112,7 @@
 
 <main>
   {#if !$walletStore?.connected}
-    <h1>Contribute and get rewarded</h1>
+    <h1>Create together</h1>
     <WalletMultiButton walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper} />
   {:else if !githubAccessToken}
     <h1>Login to github</h1>
@@ -111,35 +123,57 @@
     <div class="title-and-refresh">
       <title class="app-name">{repo}</title><button class="refresh" on:click={refreshRepo} />
     </div>
-    <div class="reward-summary-and-proposals">
-      <section class="rewards">
-        <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
-        <div class="merged-pull-requests">
-          {#each mergedPullRequests as mergedPullRequest}
-            <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
-          {/each}
-          {#if mergedPullRequests.length === 0}
-            <p>No merged pull requests yet.</p>
-          {/if}
-        </div>
-      </section>
-      <section class="pull-requests">
-        <title>Current Proposals</title>
-        <div class="pull-requests">
-          {#each unmergedPullRequests as unmergedPullRequest}
-            <PullRequest
-              pullRequest={unmergedPullRequest}
-              {walletAddressByGithubUser}
-              {walletNameByWalletAddress}
-              tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
-              symbol={SYMBOL}
-            />
-          {/each}
-          <div />
-        </div>
-      </section>
+    <div class="tabs">
+      <button
+        class="tab"
+        class:active={currentTab === getIndexOfTab('Voting')}
+        on:click={() => (currentTab = getIndexOfTab('Voting'))}
+      >
+        Voting
+      </button>
+      <button
+        class="tab"
+        class:active={currentTab === getIndexOfTab('Leaderboard')}
+        on:click={() => (currentTab = getIndexOfTab('Leaderboard'))}
+      >
+        Leaderboard
+      </button>
     </div>
+
+    {#if currentTab === getIndexOfTab('Voting')}
+      <div class="reward-summary-and-proposals">
+        <section class="rewards">
+          <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
+
+          <div class="merged-pull-requests">
+            {#each mergedPullRequests as mergedPullRequest}
+              <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
+            {/each}
+            {#if mergedPullRequests.length === 0}
+              <p>No merged pull requests yet.</p>
+            {/if}
+          </div>
+        </section>
+        <section class="pull-requests">
+          <title>Current Proposals</title>
+          <div class="pull-requests">
+            {#each unmergedPullRequests as unmergedPullRequest}
+              <PullRequest
+                pullRequest={unmergedPullRequest}
+                {walletAddressByGithubUser}
+                {walletNameByWalletAddress}
+                tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
+                symbol={SYMBOL}
+              />
+            {/each}
+            <div />
+          </div>
+        </section>
+      </div>
+    {:else if currentTab === getIndexOfTab('Leaderboard')}
+      <Leaderboard />
+    {/if}
   {/if}
 </main>
 
