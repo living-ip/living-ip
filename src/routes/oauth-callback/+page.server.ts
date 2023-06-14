@@ -21,7 +21,7 @@ export const load = async function ({ url }) {
     }
   }
 
-  log(`Got creentials from github:`, stringify(credentials));
+  log(`Got credentials from github:`, stringify(credentials));
 
   return credentials;
 } satisfies PageServerLoad;
