@@ -100,7 +100,7 @@
 
 <main>
   {#if !$walletStore?.connected}
-    <h1>Login to your wallet</h1>
+    <h1>Contribute and get rewarded</h1>
     <WalletMultiButton walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper} />
   {:else if !githubAccessToken}
     <h1>Login to github</h1>
