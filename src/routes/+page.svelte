@@ -237,7 +237,7 @@
   main {
     /* 64px header height plus some extra space */
     padding-top: 128px;
-    gap: 64px;
+    gap: 32px;
     align-content: start;
     max-width: 900px;
     width: 100%;
@@ -317,5 +317,32 @@
     font-size: 18px;
     font-weight: 800;
     text-transform: uppercase;
+  }
+
+  .tabs {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 12px;
+    width: 100%;
+    justify-content: start;
+    border-bottom: 0.5px solid #222;
+  }
+
+  .tab {
+    width: 96px;
+    font-size: 16px;
+
+    text-transform: uppercase;
+    text-align: left;
+    justify-items: center;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    padding: 12px 0;
+    gap: 12px;
+  }
+
+  .tab.active {
+    font-weight: 600;
   }
 </style>
