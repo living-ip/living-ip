@@ -10,7 +10,7 @@
   onMount(async () => {
     // Svelte adapter doesn't yet support wallet standard. See
     // https://github.com/solana-labs/wallet-adapter/issues/788
-    // TODO: update wehen that's fixed to remove all these unneccessary wallet adapters
+    // TODO: update when that's fixed to remove all these unneccessary wallet adapters
     const { PhantomWalletAdapter, GlowWalletAdapter, SolflareWalletAdapter, BackpackWalletAdapter } = await import(
       '@solana/wallet-adapter-wallets'
     );

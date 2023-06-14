@@ -5,7 +5,7 @@
 </script>
 
 <div class="reward-summary">
-  <title>Total rewards</title>
+  <title>Total contributions</title>
   <div class="reward-summary-count-and-currency">
     <div class="reward-token-count">{total * tokenRewardPerValueUnit}</div>
     <div class="reward-token-currency">{symbol}</div>
