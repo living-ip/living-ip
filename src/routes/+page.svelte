@@ -93,10 +93,7 @@
   <title>{appName}</title>
   <div class="user">
     {#if $walletStore?.connected}
-      <WalletMultiButton
-        maxNumberOfWallets={1}
-        walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper}
-      />
+      <WalletMultiButton walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper} />
     {/if}
   </div>
 </header>
@@ -104,10 +101,7 @@
 <main>
   {#if !$walletStore?.connected}
     <h1>Login to your wallet</h1>
-    <WalletMultiButton
-      maxNumberOfWallets={1}
-      walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper}
-    />
+    <WalletMultiButton walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper} />
   {:else if !githubAccessToken}
     <h1>Login to github</h1>
     <a class="button github-login" href="/oauth">Login to github </a>
@@ -121,7 +115,7 @@
       <section class="rewards">
         <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
-        <div class="rewards">
+        <div class="merged-pull-requests">
           {#each mergedPullRequests as mergedPullRequest}
             <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
           {/each}
@@ -228,10 +222,11 @@
     display: grid;
     place-items: center;
     padding: 3px;
-    border: 0.4px solid #777;
+    border: none;
     cursor: pointer;
     height: 36px;
     aspect-ratio: 1;
+    background-color: transparent;
     background-image: url('/refresh.svg');
   }
 
@@ -254,9 +249,22 @@
     justify-items: left;
   }
 
+  section.rewards {
+    color: white;
+    border-radius: 12px;
+    padding: 12px;
+    width: 100%;
+    background: linear-gradient(45deg, #2f3d53, #659fad);
+  }
+
   .rewards {
-    justify-items: left;
     padding-top: 24px;
+    justify-items: left;
+  }
+
+  .merged-pull-requests {
+    padding-top: 24px;
+    width: 100%;
   }
 
   section.pull-requests {
