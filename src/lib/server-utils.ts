@@ -1,14 +1,16 @@
-import { log, stringify } from './functions';
+import { log, stringify } from '$lib/functions';
 import { post } from 'fetch-unfucked';
 import type { OAuthCredentials } from '../types/types';
 import dotenv from 'dotenv';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 dotenv.config();
 
 const OAUTH_CLIENT_ID = process.env.OAUTH_CLIENT_ID;
 const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
-const repoOwner = process.env.REPO_OWNER;
-const repo = process.env.REPO;
+const REPO_OWNER = process.env.REPO_OWNER;
+const REPO = process.env.REPO;
+const MONGO_ATLAS_CERTIFICATE_FILE = process.env.MONGO_ATLAS_CERTIFICATE_FILE;
 
 export const authorizationCodeToCredentials = async (authorizationCode: string): Promise<OAuthCredentials> => {
   const response = await post({
@@ -37,7 +39,30 @@ export const authorizationCodeToCredentials = async (authorizationCode: string):
     accessToken,
     tokenType,
     scope,
-    repoOwner,
-    repo,
+    repoOwner: REPO_OWNER,
+    repo: REPO,
   };
+};
+
+const urlAndQueryParamsToString = (url: string, params: Record<string, string>) => {
+  const queryParamsString = new URLSearchParams(params);
+  return `${url}?${queryParamsString}`;
+};
+
+export const getMongoClient = () => {
+  // Provided by Mongo AtlasUI
+  const mongoUrl = urlAndQueryParamsToString('mongodb+srv://decentralizedip.0uittwb.mongodb.net/', {
+    authSource: '$external',
+    authMechanism: 'MONGODB-X509',
+    retryWrites: String(true),
+    w: 'majority',
+  });
+
+  const mongoClient = new MongoClient(mongoUrl, {
+    sslKey: MONGO_ATLAS_CERTIFICATE_FILE,
+    sslCert: MONGO_ATLAS_CERTIFICATE_FILE,
+    serverApi: ServerApiVersion.v1,
+  });
+
+  return mongoClient;
 };

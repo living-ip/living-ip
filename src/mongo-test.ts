@@ -1,27 +1,31 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
-
-const CERTIFICATE_FILE = 'X509-cert-6808733925086895602.pem';
-
-const client = new MongoClient(
-  'mongodb+srv://decentralizedip.0uittwb.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority',
-  {
-    sslKey: CERTIFICATE_FILE,
-    sslCert: CERTIFICATE_FILE,
-    serverApi: ServerApiVersion.v1,
-  },
-);
+import { log } from '$lib/functions';
+import { getMongoClient } from '$lib/server-utils';
 
 async function run() {
+  const mongoClient = await getMongoClient();
   try {
-    await client.connect();
-    const database = client.db('testDB');
-    const collection = database.collection('testCol');
-    const docCount = await collection.countDocuments({});
-    console.log(docCount);
+    await mongoClient.connect();
+    const database = mongoClient.db('decentralizedIP');
+    const usersCollection = await database.createCollection('users');
+    await usersCollection.insertMany([
+      {
+        walletAddress: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
+        githubUsername: 'mikemaccana',
+        walletName: 'mikemaccana.sol',
+      },
+      {
+        walletAddress: 'BQbg5NeqmkexvA7XpjPqTh1Es1RTdVTsAjCgGYviHQUp',
+        githubUsername: 'm3taversal',
+        walletName: 'metaversial.sol',
+      },
+    ]);
+    // const usersCollection = database.collection('users');
+    const documentCount = await usersCollection.countDocuments();
+    log(documentCount);
     // perform actions using client
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    await mongoClient.close();
   }
 }
 
