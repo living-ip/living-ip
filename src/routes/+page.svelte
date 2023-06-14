@@ -14,7 +14,7 @@
   import { getTotalValue } from '../lib/utils';
   const appName = `decentralized IP`;
 
-  const SYMBOL = 'TKN';
+  const SYMBOL = 'POINTS';
 
   const TOKEN_REWARD_PER_VALUE_UNIT = 1000;
 
