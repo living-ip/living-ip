@@ -24,7 +24,7 @@
   </div>
   <div class="name">{pullRequest.title}</div>
   <div class="reward">
-    Reward: <strong>{pullRequest.value * tokenRewardPerValueUnit} {symbol}</strong>
+    Contribution: <strong>{pullRequest.value * tokenRewardPerValueUnit} {symbol}</strong>
   </div>
   <ProgressBar {voteCount} {votesRequired} />
 </div>
