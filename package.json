@@ -39,7 +39,7 @@
     "@octokit/rest": "^19.0.11",
     "@portal-payments/wallet-adapter-anchor": "^2.0.3",
     "@portal-payments/wallet-adapter-core": "^2.0.3",
-    "@portal-payments/wallet-adapter-ui": "^2.2.14",
+    "@portal-payments/wallet-adapter-ui": "^2.2.17",
     "@project-serum/anchor": "^0.24.2",
     "@solana/wallet-adapter-base": "^0.9.22",
     "@solana/wallet-adapter-wallets": "^0.19.16",
@@ -47,6 +47,7 @@
     "avsc": "github:Bundlr-Network/avsc#csp-fixes",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
-    "fetch-unfucked": "^1.2.5"
+    "fetch-unfucked": "^1.2.5",
+    "mongodb": "^5.6.0"
   }
 }
