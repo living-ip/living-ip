@@ -40,7 +40,6 @@ const summarizePullRequest = async (
     throw new Error(`Bad response from GitHub: ${pullRequestDetailsResponse.status}`);
   }
 
-
   const pullRequestDetailsFromAPI = pullRequestDetailsResponse.data as GitHubAPIDetailedPullRequest;
 
   // Now add the additional fields from the second request
@@ -71,7 +70,7 @@ export const getGithubUsername = async (githubAccessToken: string) => {
   return githubUsername;
 };
 
-export const getPullRequests = async (githubAccessToken: string, repoOwner: string, repo: string) => {
+export const getPullRequestsFromGitHub = async (githubAccessToken: string, repoOwner: string, repo: string) => {
   const octokit = new Octokit({
     auth: githubAccessToken,
   });

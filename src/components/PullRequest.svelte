@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { SummarizedPullRequest } from '../types/types';
+  import type { SummarizedPullRequestWithUserDetails } from '../types/types';
   import ProgressBar from './ProgressBar.svelte';
 
-  export let pullRequest: SummarizedPullRequest;
+  export let pullRequest: SummarizedPullRequestWithUserDetails;
   export let tokenRewardPerValueUnit: number;
   export let symbol: string;
 
@@ -10,14 +10,18 @@
   let voteCount: 3;
   let votesRequired: 5;
 
-  const walletAddress = 'xxx';
+  const walletAddress = pullRequest.walletAddress;
 
-  const walletName = 'xxx';
+  const walletName = pullRequest.walletName;
 </script>
 
 <div class="pull-request">
   <div class="user">
-    <div class="profile-picture" />
+    {#if pullRequest.profilePicture}
+      <img class="profile-picture" src={pullRequest.profilePicture} alt="profile" />
+    {:else}
+      <div class="profile-picture" />
+    {/if}
     <div class="wallet-name">{walletName || walletAddress}</div>
   </div>
   <div class="name">

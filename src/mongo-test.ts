@@ -5,6 +5,8 @@ const mongoClient = await getMongoClient();
 try {
   await mongoClient.connect();
   const database = mongoClient.db('decentralizedIP');
+
+  // TODO: add profilePicture
   // const usersCollection = await database.createCollection('users');
   // await usersCollection.insertMany([
   //   {

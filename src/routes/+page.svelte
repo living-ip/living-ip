@@ -5,15 +5,13 @@
   import type { PublicKey } from '@solana/web3.js';
   import * as http from 'fetch-unfucked';
   import { walletStore } from '@portal-payments/wallet-adapter-core';
-  import { getGithubUsername, getPullRequests } from '../lib/get-pull-requests';
-  import type { SummarizedPullRequest } from '../types/types';
+  import type { SummarizedPullRequestWithUserDetails } from '../types/types';
   import { onMount } from 'svelte';
   import RewardSummary from '../components/RewardSummary.svelte';
   import Leaderboard from '../components/Leaderboard.svelte';
   import Reward from '../components/Reward.svelte';
   import PullRequest from '../components/PullRequest.svelte';
   import { log, stringify } from '../lib/functions';
-  import { getTotalValue } from '../lib/utils';
   const appName = `decentralized IP`;
 
   const SYMBOL = 'POINTS';
@@ -27,13 +25,10 @@
 
   let isLoading = true;
 
-  // TODO: delete
-  let currentUserWalletAddress: string | null = null;
-
-  let pullRequests: Array<SummarizedPullRequest> = [];
-  let userPullRequests: Array<SummarizedPullRequest> = [];
-  let mergedPullRequests: Array<SummarizedPullRequest> = [];
-  let unmergedPullRequests: Array<SummarizedPullRequest> = [];
+  let pullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
+  let userPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
+  let mergedPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
+  let unmergedPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
   let total: number | null = null;
 
   const connection = $workSpace.connection;
@@ -70,9 +65,7 @@
   walletStore.subscribe(async newValue => {
     if (newValue?.publicKey) {
       log(`🚀 $walletStore.connected has updated!`, $walletStore.connected);
-      currentUserWalletAddress = $walletStore.publicKey.toBase58();
-
-      log(`>>>> walletAddress`, $walletStore.publicKey?.toBase58());
+      // $walletStore.publicKey.toBase58(); now has our wallet address
       updateFromGithub();
     }
   });
@@ -252,6 +245,7 @@
   }
 
   button.refresh {
+    opacity: 0.2;
     display: grid;
     place-items: center;
     padding: 3px;

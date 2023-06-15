@@ -20,6 +20,13 @@ export type SummarizedPullRequestFromPullsAPI = Pick<
   'id' | 'pullNumber' | 'apiURL' | 'htmlURL' | 'title' | 'user'
 >;
 
+// A full pull request object from the 'get pull request' API
+export interface SummarizedPullRequestWithUserDetails extends SummarizedPullRequest {
+  walletAddress: string;
+  walletName: string | null;
+  profilePicture: string | null;
+}
+
 export type OAuthCredentials = {
   accessToken: string;
   tokenType: string;
