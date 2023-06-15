@@ -13,6 +13,13 @@ npm run dev
 
 Then visit http://localhost:5173/ in your browser.
 
+## Sessions
+
+ - Users connects wallet.
+ - Server generates a random session key for the user, encrypted with their public key.
+ - User decrypts the session key, using their wallet.
+ - User saves the session key.
+
 ## MVP limits
 
  - Voting and payouts can be done by building a custom on-chain in future, but for now the Sveltekit backend handles voting, and payouts are done manually.
