@@ -4,13 +4,16 @@ import { log, stringify } from '$lib/functions';
 import { getMongoClient } from '$lib/server-utils';
 import type { Handle } from "@sveltejs/kit";
 
+log(`🧺Connecting to MongoDB...`);
+const mongoClient = await getMongoClient();
+await mongoClient.connect();
+const database = mongoClient.db('decentralizedIP');
+log(`🧺 connected to MongoDB!`);
+
 export const handle = (async ({ event, resolve }) => {
-  const mongoClient = await getMongoClient();
+  
   try { 
-    log(`🧺Connecting to MongoDB...`);
-    await mongoClient.connect();
-    const database = mongoClient.db('decentralizedIP');
-    log(`🧺 connected to MongoDB!`);
+    
     event.locals = { database };
 
     const response = await resolve(event);

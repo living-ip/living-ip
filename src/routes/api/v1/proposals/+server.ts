@@ -1,13 +1,23 @@
 // https://kit.svelte.dev/docs/routing#server
 import { log, stringify } from '$lib/functions';
 import { json, type RequestHandler } from '@sveltejs/kit';
+import type {  Db }  from 'mongodb';
 
 // export const GET = async function (({ database }) {
 export const GET = ((request) => {
   log(`Handling GET request...`);
 
-  const walletAddress = request.url.searchParams.get('walletAddress');
-  const accessToken = request.url.searchParams.get('githubAccessToken');
+  const databaseOrNull = request.locals['database'] || null;
+  if (!databaseOrNull) {
+    throw new Error(`No database found in request.locals`);
+  }
+
+  const database = databaseOrNull as Db;
+
+  log('database is', database);
+
+  // const walletAddress = request.url.searchParams.get('walletAddress');
+  // const accessToken = request.url.searchParams.get('githubAccessToken');
 
   // const usersCollection = database.collection('users');
   // const userDocument = usersCollection.findOne({ githubUsername });
