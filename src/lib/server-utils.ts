@@ -8,9 +8,10 @@ dotenv.config();
 
 const OAUTH_CLIENT_ID = process.env.OAUTH_CLIENT_ID;
 const OAUTH_CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
-const REPO_OWNER = process.env.REPO_OWNER;
-const REPO = process.env.REPO;
 const MONGO_ATLAS_CERTIFICATE_FILE = process.env.MONGO_ATLAS_CERTIFICATE_FILE;
+
+export const REPO_OWNER = process.env.REPO_OWNER;
+export const REPO = process.env.REPO;
 
 export const authorizationCodeToCredentials = async (authorizationCode: string): Promise<OAuthCredentials> => {
   const response = await post({

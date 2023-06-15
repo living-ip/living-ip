@@ -1,37 +1,49 @@
 // https://kit.svelte.dev/docs/routing#server
 import { log, stringify } from '$lib/functions';
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { getPullRequests } from '$lib/get-pull-requests';
+import { error as makeHTTPError, json as makeJSONResponse, type RequestHandler } from '@sveltejs/kit';
 import type {  Db }  from 'mongodb';
 
-// export const GET = async function (({ database }) {
-export const GET = ((request) => {
-  log(`Handling GET request...`);
+import {REPO_OWNER, REPO} from '$lib/server-utils';
+import { getTotalValue } from '$lib/utils';
+
+// http://localhost:5173/api/v1/proposals?walletAddress=5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM&githubAccessToken=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  }
+
+export const GET = (async (request) => {
+  log(`Handling GET request to /api/v1/proposals`);
+
+  const walletAddress = request.url.searchParams.get('walletAddress');
+  if ( ! walletAddress) {
+    throw makeHTTPError(400, `No walletAddress found in request.url.searchParams`);
+  }
+  
+  const githubAccessToken = request.url.searchParams.get('githubAccessToken');
+  if ( ! githubAccessToken) {
+    throw makeHTTPError(400, `No githubAccessToken found in request.url.searchParams`);
+  }
 
   const databaseOrNull = request.locals['database'] || null;
   if (!databaseOrNull) {
     throw new Error(`No database found in request.locals`);
   }
-
   const database = databaseOrNull as Db;
 
-  log('database is', database);
 
-  // const walletAddress = request.url.searchParams.get('walletAddress');
-  // const accessToken = request.url.searchParams.get('githubAccessToken');
+  const usersCollection = database.collection('users');
+  const user = await usersCollection.findOne({ walletAddress });
 
-  // const usersCollection = database.collection('users');
-  // const userDocument = usersCollection.findOne({ githubUsername });
- 
+  const pullRequests = await getPullRequests(githubAccessToken, REPO_OWNER, REPO);
 
-  // const pullRequests = await getPullRequests(githubAccessToken, repoOwner, repo);
-  // const userPullRequests = pullRequests.filter(pullRequest => pullRequest.user === githubUsername);
-  // const mergedPullRequests = userPullRequests.filter(pullRequest => pullRequest.isMerged);
-  // const unmergedPullRequests = userPullRequests.filter(pullRequest => !pullRequest.isMerged);
-  // const total = getTotalValue(mergedPullRequests, githubUsername);
+  const userPullRequests = pullRequests.filter(pullRequest => pullRequest.user === user.githubUsername);
+  const mergedPullRequests = userPullRequests.filter(pullRequest => pullRequest.isMerged);
+  const unmergedPullRequests = userPullRequests.filter(pullRequest => !pullRequest.isMerged);
+  const total = getTotalValue(mergedPullRequests, user.githubUsername);
 
-  // log(`Got credentials from github:`, stringify(credentials));
 
   return json({
-    'hello': 'world'
+    userPullRequests,
+    mergedPullRequests,
+    unmergedPullRequests,
+    total,
   });
 }) satisfies RequestHandler;
