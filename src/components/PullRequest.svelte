@@ -3,8 +3,6 @@
   import ProgressBar from './ProgressBar.svelte';
 
   export let pullRequest: SummarizedPullRequest;
-  export let walletAddressByGithubUser: Record<string, string>;
-  export let walletNameByWalletAddress: Record<string, string>;
   export let tokenRewardPerValueUnit: number;
   export let symbol: string;
 
@@ -12,9 +10,9 @@
   let voteCount: 3;
   let votesRequired: 5;
 
-  const walletAddress = walletAddressByGithubUser[pullRequest.user] || null;
+  const walletAddress = 'xxx';
 
-  const walletName = walletNameByWalletAddress[walletAddress] || null;
+  const walletName = 'xxx';
 </script>
 
 <div class="pull-request">

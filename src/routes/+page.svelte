@@ -25,16 +25,6 @@
   let repoOwner: string | null = null;
   let repo: string | null = null;
 
-  const walletAddressByGithubUser = {
-    mikemaccana: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
-    m3taversal: 'BQbg5NeqmkexvA7XpjPqTh1Es1RTdVTsAjCgGYviHQUp',
-  };
-
-  const walletNameByWalletAddress = {
-    '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM': 'mikemaccana.sol',
-    BQbg5NeqmkexvA7XpjPqTh1Es1RTdVTsAjCgGYviHQUp: 'metaversial.sol',
-  };
-
   let isLoading = true;
 
   // TODO: delete
@@ -169,10 +159,9 @@
           <title>Current Proposals</title>
           <div class="pull-requests">
             {#each unmergedPullRequests as unmergedPullRequest}
+              <!-- Do we show Solana users matching GitHub accounts? -->
               <PullRequest
                 pullRequest={unmergedPullRequest}
-                {walletAddressByGithubUser}
-                {walletNameByWalletAddress}
                 tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
                 symbol={SYMBOL}
               />
