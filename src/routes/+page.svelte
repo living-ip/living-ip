@@ -3,6 +3,7 @@
 
   import { walletAddressToNameAndProfilePicture } from '@portal-payments/solana-wallet-names';
   import type { PublicKey } from '@solana/web3.js';
+  import * as http from 'fetch-unfucked';
   import { walletStore } from '@portal-payments/wallet-adapter-core';
   import { getGithubUsername, getPullRequests } from '../lib/get-pull-requests';
   import type { SummarizedPullRequest } from '../types/types';
@@ -24,13 +25,6 @@
   let repoOwner: string | null = null;
   let repo: string | null = null;
 
-  // TODO: after a user authenticates to Github, save this is a DB
-  // maybe a Users collection
-  const userDocument = {
-    walletAddress: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
-    githubUsername: 'mikemaccana',
-    walletName: 'mikemaccana.sol',
-  };
   const walletAddressByGithubUser = {
     mikemaccana: '5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM',
     m3taversal: 'BQbg5NeqmkexvA7XpjPqTh1Es1RTdVTsAjCgGYviHQUp',
@@ -43,6 +37,7 @@
 
   let isLoading = true;
 
+  // TODO: delete
   let currentUserWalletAddress: string | null = null;
 
   let pullRequests: Array<SummarizedPullRequest> = [];
@@ -57,26 +52,44 @@
     return walletAddressToNameAndProfilePicture(connection, publicKey);
   };
 
-  walletStore.subscribe(newValue => {
-    if (newValue?.publicKey) {
-      log(`🚀 $walletStore.connected has updated!`, $walletStore.connected);
-      currentUserWalletAddress = $walletStore.publicKey.toBase58();
-    }
-  });
-
   const updateFromGithub = async () => {
     isLoading = true;
-    pullRequests = await getPullRequests(githubAccessToken, repoOwner, repo);
-    userPullRequests = pullRequests.filter(pullRequest => pullRequest.user === githubUsername);
-    mergedPullRequests = userPullRequests.filter(pullRequest => pullRequest.isMerged);
-    unmergedPullRequests = userPullRequests.filter(pullRequest => !pullRequest.isMerged);
-    total = getTotalValue(mergedPullRequests, githubUsername);
+    const response = await http.get({
+      url: '/api/v1/proposals',
+      params: {
+        walletAddress: $walletStore.publicKey.toBase58(),
+        githubAccessToken,
+      },
+    });
+
+    log('response is', response.body);
+
+    if (response.status !== 'OK') {
+      throw Error('oh shit', response.body);
+    }
+
+    pullRequests = response.body.pullRequests;
+    userPullRequests = response.body.userPullRequests;
+    mergedPullRequests = response.body.mergedPullRequests;
+    unmergedPullRequests = response.body.unmergedPullRequests;
+    total = response.body.total;
 
     isLoading = false;
   };
 
+  walletStore.subscribe(async newValue => {
+    if (newValue?.publicKey) {
+      log(`🚀 $walletStore.connected has updated!`, $walletStore.connected);
+      currentUserWalletAddress = $walletStore.publicKey.toBase58();
+
+      log(`>>>> walletAddress`, $walletStore.publicKey?.toBase58());
+      updateFromGithub();
+    }
+  });
+
   onMount(async () => {
     githubAccessToken = window.localStorage.getItem('githubAccessToken');
+
     repoOwner = window.localStorage.getItem('repoOwner');
     repo = window.localStorage.getItem('repo');
 
@@ -84,9 +97,6 @@
       log(`No githubAccessToken found in localStorage`);
       return;
     }
-
-    githubUsername = await getGithubUsername(githubAccessToken);
-    await updateFromGithub();
   });
 
   const refreshRepo = async () => {

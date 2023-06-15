@@ -40,7 +40,6 @@ const summarizePullRequest = async (
     throw new Error(`Bad response from GitHub: ${pullRequestDetailsResponse.status}`);
   }
 
-  log(`Got details for pull request ${summarizedPullRequestFromPullsAPI.id}`);
 
   const pullRequestDetailsFromAPI = pullRequestDetailsResponse.data as GitHubAPIDetailedPullRequest;
 
