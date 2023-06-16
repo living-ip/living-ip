@@ -5,7 +5,7 @@
   import type { PublicKey } from '@solana/web3.js';
   import * as http from 'fetch-unfucked';
   import { walletStore } from '@portal-payments/wallet-adapter-core';
-  import type { SummarizedPullRequestWithUserDetails } from '../types/types';
+  import type { SummarizedPullRequestWithUserDetails, PullRequestWithVotes } from '../types/types';
   import { onMount } from 'svelte';
   import RewardSummary from '../components/RewardSummary.svelte';
   import Leaderboard from '../components/Leaderboard.svelte';
@@ -19,14 +19,14 @@
   const TOKEN_REWARD_PER_VALUE_UNIT = 1000;
 
   let githubAccessToken: string | null = null;
-  let githubUsername: string | null = null;
   let repoOwner: string | null = null;
   let repo: string | null = null;
 
   let isLoading = true;
-
-  let mergedPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
-  let unmergedPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
+  let allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
+  let allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
+  let userMergedPullRequestWithVotes: Array<PullRequestWithVotes> = [];
+  let pullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let total: number | null = null;
 
   const connection = $workSpace.connection;
@@ -51,8 +51,14 @@
       throw Error(`Error from Decentralized IP API: ${response.status}: ${response.body}`);
     }
 
-    mergedPullRequests = response.body.mergedPullRequests;
-    unmergedPullRequests = response.body.unmergedPullRequests;
+    pullRequestsWithVotes = response.body.pullRequestsWithVotes;
+
+    userMergedPullRequestWithVotes = response.body.userMergedPullRequestWithVotes;
+
+    allUsersMergedPullRequestsWithVotes = response.body.allUsersMergedPullRequestsWithVotes;
+
+    allUsersUnmergedPullRequestsWithVotes = response.body.allUsersUnmergedPullRequestsWithVotes;
+
     total = response.body.total;
 
     isLoading = false;
@@ -136,10 +142,10 @@
           <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
           <div class="merged-pull-requests">
-            {#each mergedPullRequests as mergedPullRequest}
+            {#each userMergedPullRequestWithVotes as mergedPullRequest}
               <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
             {/each}
-            {#if mergedPullRequests.length === 0}
+            {#if userMergedPullRequestWithVotes.length === 0}
               <p>No merged pull requests yet.</p>
             {/if}
           </div>
@@ -147,10 +153,11 @@
         <section class="pull-requests">
           <title>Current Proposals</title>
           <div class="pull-requests">
-            {#each unmergedPullRequests as unmergedPullRequest}
+            {#each allUsersUnmergedPullRequestsWithVotes as pullRequestWithVotes}
               <!-- Do we show Solana users matching GitHub accounts? -->
               <PullRequest
-                proposal={unmergedPullRequest}
+                {pullRequestWithVotes}
+                walletAddress={$walletStore.publicKey.toBase58()}
                 tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
                 symbol={SYMBOL}
               />
@@ -160,7 +167,7 @@
         </section>
       </div>
     {:else if currentTab === getIndexOfTab('Leaderboard')}
-      <Leaderboard />
+      <Leaderboard mergedPullRequests={allUsersMergedPullRequestsWithVotes} />
     {/if}
   {/if}
 </main>

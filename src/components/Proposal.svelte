@@ -1,43 +1,54 @@
 <script lang="ts">
-  import type { SummarizedPullRequestWithUserDetails } from '../types/types';
+  import type { PullRequestWithVotes } from '../types/types';
+  import { stringify, log } from '../lib/functions';
   import ProgressBar from './ProgressBar.svelte';
 
-  export let proposal: SummarizedPullRequestWithUserDetails;
+  export let pullRequestWithVotes: PullRequestWithVotes;
+  export let walletAddress: string;
   export let tokenRewardPerValueUnit: number;
+
   export let symbol: string;
 
-  // TODO: store in the DB (or in the blockchain)
-  let voteCount: 3;
-  let votesRequired: 5;
+  let voteCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
 
-  const walletAddress = proposal.walletAddress;
+  // TODO: hack. Should be based on total users
+  const votesRequired = 2;
 
-  const walletName = proposal.walletName;
+  const currentUserVote = pullRequestWithVotes.votes?.[walletAddress] || null;
+
+  const vote = (direction: boolean) => async () => {
+    log('voting', direction);
+    if (currentUserVote === direction) {
+      log('already voted');
+      return;
+    }
+    // TODO: send vote to the server
+  };
 </script>
 
 <div class="pull-request">
   <div class="pull-request-details">
     <div class="user">
-      {#if proposal.profilePicture}
-        <img class="profile-picture" src={proposal.profilePicture} alt="profile" />
+      {#if pullRequestWithVotes.profilePicture}
+        <img class="profile-picture" src={pullRequestWithVotes.profilePicture} alt="profile" />
       {:else}
         <div class="profile-picture" />
       {/if}
-      <div class="wallet-name">{walletName || walletAddress}</div>
+      <div class="wallet-name">{pullRequestWithVotes.walletName || pullRequestWithVotes.walletAddress}</div>
     </div>
     <div class="name">
-      <a href={`${proposal.htmlURL}/files`} target="_blank">
-        {proposal.title}
+      <a href={`${pullRequestWithVotes.htmlURL}/files`} target="_blank">
+        {pullRequestWithVotes.title}
       </a>
     </div>
     <div class="reward">
-      Contribution: <strong>{proposal.value * tokenRewardPerValueUnit} {symbol}</strong>
+      Contribution:&nbsp; <strong>{pullRequestWithVotes.value * tokenRewardPerValueUnit} {symbol}</strong>
     </div>
     <ProgressBar {voteCount} {votesRequired} />
   </div>
   <div class="voting">
-    <button class="vote up" />
-    <button class="vote down" />
+    <button class="vote up" on:click={vote(true)} />
+    <button class="vote down" on:click={vote(false)} />
   </div>
 </div>
 
@@ -94,7 +105,7 @@
     cursor: pointer;
   }
 
-  .vote.up.active {
+  .vote:hover {
     opacity: 0.6;
   }
 

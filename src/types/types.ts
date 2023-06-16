@@ -34,3 +34,7 @@ export type OAuthCredentials = {
   repoOwner: string;
   repo: string;
 };
+
+export interface PullRequestWithVotes extends SummarizedPullRequestWithUserDetails {
+  votes: Record<string, boolean>;
+}

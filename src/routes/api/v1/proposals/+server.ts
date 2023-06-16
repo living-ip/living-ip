@@ -6,7 +6,7 @@ import type { Db } from 'mongodb';
 
 import { REPO_OWNER, REPO } from '$lib/server-utils';
 import { getTotalValue } from '$lib/utils';
-import type { SummarizedPullRequestWithUserDetails } from '../../../../types/types';
+import type { PullRequestWithVotes, SummarizedPullRequestWithUserDetails } from '../../../../types/types';
 
 // http://localhost:5173/api/v1/proposals?walletAddress=5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM&githubAccessToken=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  }
 
@@ -44,6 +44,7 @@ export const GET = (async request => {
     }
   }
 
+  // Start with GitHub
   const pullRequestsFromGithub = await getPullRequestsFromGitHub(githubAccessToken, REPO_OWNER, REPO);
 
   // Add relevant data from Solana
@@ -58,15 +59,39 @@ export const GET = (async request => {
     return summarizedPullRequestWithUserDetails;
   })) as Array<SummarizedPullRequestWithUserDetails>;
 
-  const userPullRequests = pullRequests.filter(pullRequest => pullRequest.user === user.githubUsername);
-  const mergedPullRequests = userPullRequests.filter(pullRequest => pullRequest.isMerged);
-  const unmergedPullRequests = userPullRequests.filter(pullRequest => !pullRequest.isMerged);
-  const total = getTotalValue(mergedPullRequests, user.githubUsername);
+  // Add votes from our own DB
+  const pullRequestsWithVotes = (await asyncMap(pullRequests, async unmergedPullRequest => {
+    const pullRequestWithVotes: Partial<PullRequestWithVotes> = unmergedPullRequest;
+    const url = unmergedPullRequest.htmlURL;
+    const proposal = await database.collection('proposals').findOne({ url });
+    pullRequestWithVotes.votes = proposal?.votes || [];
+    return pullRequestWithVotes;
+  })) as Array<PullRequestWithVotes>;
+
+  const userPullRequestsWithVotes: Array<PullRequestWithVotes> = pullRequestsWithVotes.filter(
+    pullRequest => pullRequest.user === user.githubUsername,
+  );
+
+  const allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = pullRequestsWithVotes.filter(
+    pullRequest => pullRequest.isMerged,
+  );
+
+  const allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes> = pullRequestsWithVotes.filter(
+    pullRequest => !pullRequest.isMerged,
+  );
+
+  const userMergedPullRequestWithVotes: Array<PullRequestWithVotes> = allUsersMergedPullRequestsWithVotes.filter(
+    pullRequest => pullRequest.user === user.githubUsername,
+  );
+
+  const total = getTotalValue(userMergedPullRequestWithVotes);
 
   return makeJSONResponse({
-    userPullRequests,
-    mergedPullRequests,
-    unmergedPullRequests,
+    pullRequestsWithVotes,
+    userPullRequestsWithVotes,
+    userMergedPullRequestWithVotes,
+    allUsersMergedPullRequestsWithVotes,
+    allUsersUnmergedPullRequestsWithVotes,
     total,
   });
 }) satisfies RequestHandler;

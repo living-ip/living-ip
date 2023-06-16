@@ -1,6 +1,8 @@
 <script lang="ts">
   // https://english.stackexchange.com/questions/97140/leader-board-vs-leaderboard
 
+  import type { PullRequestWithVotes } from '../types/types';
+
   const userLeaderboardEntries = [
     {
       rank: 1,
@@ -17,6 +19,8 @@
       isCurrentUser: true,
     },
   ];
+
+  export let mergedPullRequests: Array<PullRequestWithVotes>;
 
   const rankToMedal = (rank: number) => {
     if (rank === 1) {

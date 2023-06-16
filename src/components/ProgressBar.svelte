@@ -21,7 +21,7 @@
   .progress-bar-fill {
     width: 50%;
     height: 100%;
-    background-color: #000000;
+    background: linear-gradient(90deg, rgb(44, 52, 110), #659fad);
     border-radius: 4px;
   }
 </style>
