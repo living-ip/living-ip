@@ -10,7 +10,7 @@
   import RewardSummary from '../components/RewardSummary.svelte';
   import Leaderboard from '../components/Leaderboard.svelte';
   import Reward from '../components/Reward.svelte';
-  import PullRequest from '../components/PullRequest.svelte';
+  import PullRequest from '../components/Proposal.svelte';
   import { log, stringify } from '../lib/functions';
   const appName = `decentralized IP`;
 
@@ -25,8 +25,6 @@
 
   let isLoading = true;
 
-  let pullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
-  let userPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
   let mergedPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
   let unmergedPullRequests: Array<SummarizedPullRequestWithUserDetails> = [];
   let total: number | null = null;
@@ -50,11 +48,9 @@
     log('response is', response.body);
 
     if (response.status !== 'OK') {
-      throw Error('oh shit', response.body);
+      throw Error(`Error from Decentralized IP API: ${response.status}: ${response.body}`);
     }
 
-    pullRequests = response.body.pullRequests;
-    userPullRequests = response.body.userPullRequests;
     mergedPullRequests = response.body.mergedPullRequests;
     unmergedPullRequests = response.body.unmergedPullRequests;
     total = response.body.total;
@@ -154,7 +150,7 @@
             {#each unmergedPullRequests as unmergedPullRequest}
               <!-- Do we show Solana users matching GitHub accounts? -->
               <PullRequest
-                pullRequest={unmergedPullRequest}
+                proposal={unmergedPullRequest}
                 tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
                 symbol={SYMBOL}
               />
