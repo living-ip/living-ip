@@ -4,7 +4,7 @@ Based on SvelteKit, using [svelte-on-solana](https://github.com/svelte-on-solana
 
 ## To start the app
 
-You'll need a `.env` file (not checked into the repo since it contains secrets). See `.env.example` for an example.
+You'll also need a `.env` file and `.pem` certificate - these are not checked into the repo since these contain secrets. Ask Mike or Corey.
 
 ```
 npm i
@@ -22,6 +22,6 @@ Then visit http://localhost:5173/ in your browser.
 
 ## MVP limits
 
- - Voting and payouts can be done by building a custom on-chain in future, but for now the Sveltekit backend handles voting, and payouts are done manually.
+ - Voting and payouts can be done by building a custom on-chain app in future, but for now the Sveltekit backend handles voting, and payouts are done manually.
 
  
