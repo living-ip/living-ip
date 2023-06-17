@@ -62,11 +62,6 @@
   };
 </script>
 
-<p>leaderboardArray</p>
-<textarea>{stringify(leaderboardArray)}</textarea>
-<p>mergedPullRequests</p>
-<textarea>{stringify(mergedPullRequests)}</textarea>
-
 <div class="leaderboard-card">
   <div class="leaderboard">
     <div class="heading rank">Rank</div>
