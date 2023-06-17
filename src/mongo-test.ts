@@ -74,7 +74,10 @@ try {
   log(stringify(result));
 } catch (thrownObject) {
   const error = thrownObject as Error;
-  log(`Error cnnecting to MongoDB`, error.message);
+  if (error.message.includes('certificate validation failed')) {
+    throw new Error(`Error connecting to MongoDB: the .pem file mentioned in the .env file is missing or invalid.`);
+  }
+  log(`Error connecting to MongoDB`, error.message);
 } finally {
   // Ensures that the client will close when you finish/error
   await mongoClient.close();

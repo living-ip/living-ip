@@ -6,16 +6,16 @@
 
 import { log, stringify } from '$lib/functions';
 import { getMongoClient } from '$lib/server-utils';
-import type { Handle } from "@sveltejs/kit";
+import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
   const mongoClient = await getMongoClient();
-  try { 
+  try {
     log(`🧺Connecting to MongoDB...`);
     await mongoClient.connect();
     const database = mongoClient.db('decentralizedIP');
     log(`🧺 connected to MongoDB!`);
-    
+
     event.locals = { database };
 
     const response = await resolve(event);
@@ -23,8 +23,10 @@ export const handle = (async ({ event, resolve }) => {
     return response;
   } catch (thrownObject) {
     const error = thrownObject as Error;
-    console.log(`Error cnnecting to MongoDB`, error.message);
-    throw error;
+    if (error.message.includes('certificate validation failed')) {
+      throw new Error(`Error connecting to MongoDB: the .pem file mentioned in the .env file is missing or invalid.`);
+    }
+    log(`Error connecting to MongoDB`, error.message);
   } finally {
     await mongoClient.close();
   }
