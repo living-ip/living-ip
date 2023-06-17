@@ -64,15 +64,13 @@ export const GET = (async request => {
   // Add relevant data from Solana
   const pullRequests = (await asyncMap(pullRequestsFromGithub, async pullRequest => {
     const summarizedPullRequestWithUserDetails: Partial<SummarizedPullRequestWithUserDetails> = pullRequest;
-    if (!pullRequest.isMerged) {
-      const user = await usersCollection.findOne({ githubUsername: pullRequest.user });
-      if (!user) {
-        throw new Error(`No user found with githubUsername: ${pullRequest.user}`);
-      }
-      summarizedPullRequestWithUserDetails.walletAddress = user.walletAddress;
-      summarizedPullRequestWithUserDetails.walletName = user.walletName;
-      summarizedPullRequestWithUserDetails.profilePicture = user.profilePicture || null;
+    const user = await usersCollection.findOne({ githubUsername: pullRequest.user });
+    if (!user) {
+      throw new Error(`No user found with githubUsername: ${pullRequest.user}`);
     }
+    summarizedPullRequestWithUserDetails.walletAddress = user.walletAddress;
+    summarizedPullRequestWithUserDetails.walletName = user.walletName;
+    summarizedPullRequestWithUserDetails.profilePicture = user.profilePicture || null;
     return summarizedPullRequestWithUserDetails;
   })) as Array<SummarizedPullRequestWithUserDetails>;
 
