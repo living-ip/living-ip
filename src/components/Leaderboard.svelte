@@ -3,6 +3,7 @@
 
   import type { PullRequestWithVotes } from '../types/types';
   import { log, stringify } from '../lib/functions';
+  import { TOKEN_REWARD_PER_VALUE_UNIT } from '../lib/constants';
 
   export let mergedPullRequests: Array<PullRequestWithVotes>;
   export let currentUserWalletAddress: string;
@@ -22,16 +23,16 @@
     if (!existingEntry) {
       summaryByWalletAddress[walletAddress] = {
         walletName: mergedPullRequest.walletName,
-        weekPoints: mergedPullRequest.value,
-        totalPoints: mergedPullRequest.value,
+        weekPoints: mergedPullRequest.value * TOKEN_REWARD_PER_VALUE_UNIT,
+        totalPoints: mergedPullRequest.value * TOKEN_REWARD_PER_VALUE_UNIT,
       };
       return;
     }
 
     summaryByWalletAddress[walletAddress] = {
       walletName: mergedPullRequest.walletName,
-      weekPoints: existingEntry.weekPoints + mergedPullRequest.value,
-      totalPoints: existingEntry.weekPoints + mergedPullRequest.value,
+      weekPoints: existingEntry.weekPoints + mergedPullRequest.value * TOKEN_REWARD_PER_VALUE_UNIT,
+      totalPoints: existingEntry.weekPoints + mergedPullRequest.value * TOKEN_REWARD_PER_VALUE_UNIT,
     };
   });
 

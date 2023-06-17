@@ -1,0 +1,1 @@
+export const TOKEN_REWARD_PER_VALUE_UNIT = 1000;

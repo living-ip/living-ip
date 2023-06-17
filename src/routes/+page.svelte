@@ -12,11 +12,10 @@
   import Reward from '../components/Reward.svelte';
   import PullRequest from '../components/Proposal.svelte';
   import { log, stringify } from '../lib/functions';
+  import { TOKEN_REWARD_PER_VALUE_UNIT } from '../lib/constants';
   const appName = `decentralized IP`;
 
   const SYMBOL = 'POINTS';
-
-  const TOKEN_REWARD_PER_VALUE_UNIT = 1000;
 
   let githubAccessToken: string | null = null;
   let repoOwner: string | null = null;
