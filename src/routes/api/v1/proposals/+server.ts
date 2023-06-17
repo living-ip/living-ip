@@ -1,12 +1,16 @@
 // https://kit.svelte.dev/docs/routing#server
 import { asyncMap, log, stringify } from '$lib/functions';
 import { getGithubUsername, getPullRequestsFromGitHub } from '$lib/get-pull-requests';
-import { error as makeHTTPError, json as makeJSONResponse, type RequestHandler } from '@sveltejs/kit';
+import { error as makeHTTPError, json as makeJSONResponse, redirect, type RequestHandler } from '@sveltejs/kit';
 import type { Db } from 'mongodb';
 
 import { REPO_OWNER, REPO } from '$lib/server-utils';
 import { getTotalValue } from '$lib/utils';
-import type { PullRequestWithVotes, SummarizedPullRequestWithUserDetails } from '../../../../types/types';
+import type {
+  PullRequestWithVotes,
+  SummarizedPullRequest,
+  SummarizedPullRequestWithUserDetails,
+} from '../../../../types/types';
 
 // http://localhost:5173/api/v1/proposals?walletAddress=5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM&githubAccessToken=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  }
 
@@ -45,7 +49,17 @@ export const GET = (async request => {
   }
 
   // Start with GitHub
-  const pullRequestsFromGithub = await getPullRequestsFromGitHub(githubAccessToken, REPO_OWNER, REPO);
+  let pullRequestsFromGithub: SummarizedPullRequest[];
+  try {
+    pullRequestsFromGithub = await getPullRequestsFromGitHub(githubAccessToken, REPO_OWNER, REPO);
+  } catch (thrownObject) {
+    const error = thrownObject as Error;
+    log('Github credentials are bad. we probably just need to get the user to renew the oauth');
+    if (error.message.includes('Bad credentials')) {
+      throw redirect(302, '/oauth');
+    }
+    throw error;
+  }
 
   // Add relevant data from Solana
   const pullRequests = (await asyncMap(pullRequestsFromGithub, async pullRequest => {
