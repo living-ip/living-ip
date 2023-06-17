@@ -2,25 +2,49 @@
   // https://english.stackexchange.com/questions/97140/leader-board-vs-leaderboard
 
   import type { PullRequestWithVotes } from '../types/types';
-
-  const userLeaderboardEntries = [
-    {
-      rank: 1,
-      walletName: 'johndoe',
-      weekPoints: 500,
-      totalPoints: 1000,
-      isCurrentUser: false,
-    },
-    {
-      rank: 2,
-      walletName: 'johndoe',
-      weekPoints: 100,
-      totalPoints: 1000,
-      isCurrentUser: true,
-    },
-  ];
+  import { log, stringify } from '../lib/functions';
 
   export let mergedPullRequests: Array<PullRequestWithVotes>;
+  export let walletAddress: string;
+
+  let summaryByWalletAddress: Record<
+    string,
+    {
+      walletName: string;
+      weekPoints: number;
+      totalPoints: number;
+    }
+  > = {};
+
+  mergedPullRequests.map(mergedPullRequest => {
+    if (!summaryByWalletAddress.walletAddress) {
+      summaryByWalletAddress[walletAddress] = {
+        walletName: mergedPullRequest.walletName,
+        weekPoints: mergedPullRequest.value,
+        totalPoints: mergedPullRequest.value,
+      };
+      return;
+    }
+    const existingEntry = summaryByWalletAddress[walletAddress];
+    summaryByWalletAddress[walletAddress] = {
+      walletName: mergedPullRequest.walletName,
+      weekPoints: existingEntry.weekPoints + mergedPullRequest.value,
+      totalPoints: existingEntry.weekPoints + mergedPullRequest.value,
+    };
+  });
+
+  const byWeekPoints = (a, b) => b.weekPoints - a.weekPoints;
+
+  // Make leaderboard into an array and sort it by weekPoints
+  const leaderboardArray = Object.entries(summaryByWalletAddress)
+    .map(([userWalletAddress, { weekPoints, totalPoints, walletName }]) => ({
+      userWalletAddress,
+      walletName,
+      weekPoints,
+      totalPoints,
+      isCurrentUser: userWalletAddress === userWalletAddress,
+    }))
+    .sort(byWeekPoints);
 
   const rankToMedal = (rank: number) => {
     if (rank === 1) {
@@ -36,15 +60,20 @@
   };
 </script>
 
+<p>leaderboardArray</p>
+<textarea>{stringify(leaderboardArray)}</textarea>
+<p>mergedPullRequests</p>
+<textarea>{stringify(mergedPullRequests)}</textarea>
+
 <div class="leaderboard-card">
   <div class="leaderboard">
     <div class="heading rank">Rank</div>
     <div class="heading wallet-name">User</div>
     <div class="heading numeric week-points">1 week points</div>
     <div class="heading numeric total-points">Total points</div>
-    {#each userLeaderboardEntries as userLeaderboardEntry}
+    {#each leaderboardArray as userLeaderboardEntry, index}
       <div class={`rank ${userLeaderboardEntry.isCurrentUser && 'current-user'}`}>
-        {rankToMedal(userLeaderboardEntry.rank)}
+        {rankToMedal(index + 1)}
       </div>
       <div class={`wallet-name ${userLeaderboardEntry.isCurrentUser && 'current-user'}`}>
         {userLeaderboardEntry.walletName}

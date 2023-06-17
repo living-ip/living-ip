@@ -23,10 +23,10 @@
   let repo: string | null = null;
 
   let isLoading = true;
+  let pullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let userMergedPullRequestWithVotes: Array<PullRequestWithVotes> = [];
-  let pullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let total: number | null = null;
 
   const connection = $workSpace.connection;
@@ -167,7 +167,10 @@
         </section>
       </div>
     {:else if currentTab === getIndexOfTab('Leaderboard')}
-      <Leaderboard mergedPullRequests={allUsersMergedPullRequestsWithVotes} />
+      <Leaderboard
+        mergedPullRequests={allUsersMergedPullRequestsWithVotes}
+        walletAddress={$walletStore.publicKey.toBase58()}
+      />
     {/if}
   {/if}
 </main>
