@@ -66,6 +66,9 @@ export const GET = (async request => {
     const summarizedPullRequestWithUserDetails: Partial<SummarizedPullRequestWithUserDetails> = pullRequest;
     if (!pullRequest.isMerged) {
       const user = await usersCollection.findOne({ githubUsername: pullRequest.user });
+      if (!user) {
+        throw new Error(`No user found with githubUsername: ${pullRequest.user}`);
+      }
       summarizedPullRequestWithUserDetails.walletAddress = user.walletAddress;
       summarizedPullRequestWithUserDetails.walletName = user.walletName;
       summarizedPullRequestWithUserDetails.profilePicture = user.profilePicture || null;
