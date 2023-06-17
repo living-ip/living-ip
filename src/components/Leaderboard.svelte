@@ -5,7 +5,7 @@
   import { log, stringify } from '../lib/functions';
 
   export let mergedPullRequests: Array<PullRequestWithVotes>;
-  export let walletAddress: string;
+  export let currentUserWalletAddress: string;
 
   let summaryByWalletAddress: Record<
     string,
@@ -17,7 +17,9 @@
   > = {};
 
   mergedPullRequests.map(mergedPullRequest => {
-    if (!summaryByWalletAddress.walletAddress) {
+    const walletAddress = mergedPullRequest.walletAddress;
+    const existingEntry = summaryByWalletAddress[walletAddress];
+    if (!existingEntry) {
       summaryByWalletAddress[walletAddress] = {
         walletName: mergedPullRequest.walletName,
         weekPoints: mergedPullRequest.value,
@@ -25,7 +27,7 @@
       };
       return;
     }
-    const existingEntry = summaryByWalletAddress[walletAddress];
+
     summaryByWalletAddress[walletAddress] = {
       walletName: mergedPullRequest.walletName,
       weekPoints: existingEntry.weekPoints + mergedPullRequest.value,
@@ -42,7 +44,7 @@
       walletName,
       weekPoints,
       totalPoints,
-      isCurrentUser: userWalletAddress === userWalletAddress,
+      isCurrentUser: userWalletAddress === currentUserWalletAddress,
     }))
     .sort(byWeekPoints);
 

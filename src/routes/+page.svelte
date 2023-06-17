@@ -169,7 +169,7 @@
     {:else if currentTab === getIndexOfTab('Leaderboard')}
       <Leaderboard
         mergedPullRequests={allUsersMergedPullRequestsWithVotes}
-        walletAddress={$walletStore.publicKey.toBase58()}
+        currentUserWalletAddress={$walletStore.publicKey.toBase58()}
       />
     {/if}
   {/if}
