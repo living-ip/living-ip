@@ -135,6 +135,8 @@ export const POST = (async event => {
   }
   const database = databaseOrNull as Db;
 
+  const proposalsCollection = database.collection('proposals');
+
   // Yes requestEvent.request is real.
   // https://kit.svelte.dev/docs/types#public-types-requestevent
   const body = await event.request.json();
@@ -156,28 +158,29 @@ export const POST = (async event => {
     githubAccessToken,
   });
 
-  let existingVotesItem = await database.collection('votes').findOne({
+  let existingVotesItem = await proposalsCollection.findOne({
     url,
   });
 
   if (!existingVotesItem) {
-    // TODO: create item
+    log(`Nobody has voted on this proposal yet. Creating a new votes item`);
     const votesItemToCreate = {
       url,
       votes: {
         [currentUserWalletAddress]: direction,
       },
     };
-    await database.collection('votes').insertOne(votesItemToCreate);
+    await proposalsCollection.insertOne(votesItemToCreate);
 
     const voteStatus = await getVoteStatus(githubAccessToken, database, currentUserWalletAddress);
     return makeJSONResponse(voteStatus);
   }
 
   // Change the vote
+  log(`Updating the vote on proposal ${url} to ${direction ? 'yes' : 'no'}`);
   existingVotesItem.votes[currentUserWalletAddress] = direction;
 
-  await database.collection('votes').replaceOne(
+  await proposalsCollection.replaceOne(
     {
       url,
     },

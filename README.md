@@ -6,7 +6,7 @@ A SvelteKit app, built with [create-svelte](https://github.com/sveltejs/kit/tree
 
  - Connection to GitHub using [OAuth](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps), and connection to GitHub repos using [GitHub API](https://docs.github.com/en/rest).
 
- - A [hosted MongoDB Atlas instance](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP) to store `users` and `votes`. 
+ - A [hosted MongoDB Atlas instance](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP) to store `users` and `proposals`. 
 
 ## Quick overview
 
