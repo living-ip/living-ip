@@ -7,27 +7,32 @@
 import { log, stringify } from '$lib/functions';
 import { getMongoClient } from '$lib/server-utils';
 import type { Handle } from '@sveltejs/kit';
+import type { Db, MongoClient } from 'mongodb';
 
-export const handle = (async ({ event, resolve }) => {
-  const mongoClient = await getMongoClient();
-  try {
-    log(`🧺Connecting to MongoDB...`);
-    await mongoClient.connect();
-    const database = mongoClient.db('decentralizedIP');
-    log(`🧺 connected to MongoDB!`);
+log(`🔌 Connecting to database...`);
 
-    event.locals = { database };
-
-    const response = await resolve(event);
-
-    return response;
-  } catch (thrownObject) {
-    const error = thrownObject as Error;
-    if (error.message.includes('certificate validation failed')) {
-      throw new Error(`Error connecting to MongoDB: the .pem file mentioned in the .env file is missing or invalid.`);
-    }
-    log(`Error connecting to MongoDB`, error.message);
-  } finally {
+let mongoClient: MongoClient;
+try {
+  mongoClient = await getMongoClient();
+  log(`⚡ Connected! `);
+} catch (thrownObject) {
+  const error = thrownObject as Error;
+  if (error.message.includes('certificate validation failed') || error.message.includes('no such file or directory')) {
+    throw new Error(`😱 Error connecting to MongoDB: the .pem file mentioned in the .env file is missing or invalid.`);
+  }
+  log(`Error connecting to MongoDB`, error.message);
+} finally {
+  if (mongoClient) {
     await mongoClient.close();
   }
+}
+
+export const handle = (async ({ event, resolve }) => {
+  event.locals = {
+    database: mongoClient.db('decentralizedIP'),
+  };
+
+  const response = await resolve(event);
+
+  return response;
 }) satisfies Handle;
