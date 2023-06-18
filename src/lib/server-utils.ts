@@ -50,7 +50,7 @@ const urlAndQueryParamsToString = (url: string, params: Record<string, string>) 
   return `${url}?${queryParamsString}`;
 };
 
-export const getMongoClient = () => {
+export const getMongoClient = async () => {
   // Provided by Mongo AtlasUI
   const mongoUrl = urlAndQueryParamsToString('mongodb+srv://decentralizedip.0uittwb.mongodb.net/', {
     authSource: '$external',
@@ -64,6 +64,8 @@ export const getMongoClient = () => {
     sslCert: MONGO_ATLAS_CERTIFICATE_FILE,
     serverApi: ServerApiVersion.v1,
   });
+
+  await mongoClient.connect();
 
   return mongoClient;
 };

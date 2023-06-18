@@ -10,22 +10,8 @@ import type { Handle } from '@sveltejs/kit';
 import type { Db, MongoClient } from 'mongodb';
 
 log(`🔌 Connecting to database...`);
-
-let mongoClient: MongoClient;
-try {
-  mongoClient = await getMongoClient();
-  log(`⚡ Connected! `);
-} catch (thrownObject) {
-  const error = thrownObject as Error;
-  if (error.message.includes('certificate validation failed') || error.message.includes('no such file or directory')) {
-    throw new Error(`😱 Error connecting to MongoDB: the .pem file mentioned in the .env file is missing or invalid.`);
-  }
-  log(`Error connecting to MongoDB`, error.message);
-} finally {
-  if (mongoClient) {
-    await mongoClient.close();
-  }
-}
+let mongoClient: MongoClient = await getMongoClient();
+log(`⚡ Connected! `);
 
 export const handle = (async ({ event, resolve }) => {
   event.locals = {
