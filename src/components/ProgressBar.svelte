@@ -23,5 +23,6 @@
     height: 100%;
     background: linear-gradient(90deg, rgb(44, 52, 110), #659fad);
     border-radius: 4px;
+    transition: width 0.5s ease-in-out;
   }
 </style>
