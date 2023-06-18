@@ -16,7 +16,7 @@
 
   let voteUpCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
 
-  const currentUserVote = pullRequestWithVotes.votes?.[currentUserWalletAddress] ?? null;
+  $: currentUserVote = pullRequestWithVotes.votes?.[currentUserWalletAddress] ?? null;
 
   const vote = (direction: boolean, url: string) => async () => {
     log('voting', direction);
