@@ -14,7 +14,7 @@
 
   export let afterVoting: () => Promise<void>;
 
-  let voteUpCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
+  $: voteUpCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
 
   $: currentUserVote = pullRequestWithVotes.votes?.[currentUserWalletAddress] ?? null;
 

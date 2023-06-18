@@ -2,11 +2,11 @@
   export let voteCount: number;
   export let totalUsers: number;
 
-  const voteProgress = (100 / totalUsers) * voteCount;
+  $: voteProgress = (100 / totalUsers) * voteCount;
 </script>
 
 <div class="progress-bar">
-  <div class="progress-bar-fill" style="width: ${voteProgress}%;" />
+  <div class="progress-bar-fill" style="width: {voteProgress}%;" />
 </div>
 
 <style>
@@ -19,7 +19,6 @@
   }
 
   .progress-bar-fill {
-    width: 50%;
     height: 100%;
     background: linear-gradient(90deg, rgb(44, 52, 110), #659fad);
     border-radius: 4px;
