@@ -1,20 +1,20 @@
 # Decentralized IP MVP
 
-A SvelteKit app, built with [create-svelte](https://github.com/sveltejs/kit/tree/master/packages/create-svelte) using:
+ - `Users` (Solana wallets) log in with their wallets and then vote on `proposals`, which are GitHub PRs with voting added.
+
+ - `Proposals` with enough votes are merged (done manually for now using GitHub's UI).
+
+ - Users recieve `points` (which are tokens) based on the size of their merged contributions.
+
+## Technical Overview
+
+A [SvelteKit](https://kit.svelte.dev/) app, built with [create-svelte](https://github.com/sveltejs/kit/tree/master/packages/create-svelte) using:
 
  - [svelte-on-solana](https://github.com/svelte-on-solana/wallet-adapter) to connect to Solana
 
  - Connection to GitHub using [OAuth](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps), and connection to GitHub repos using [GitHub API](https://docs.github.com/en/rest).
 
- - A [hosted MongoDB Atlas instance](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP) to store `users` and `proposals`. 
-
-## Quick overview
-
- - `Users` (Solana wallets) log in with their wallets and then vote on `proposals`, which are GitHub PRs with voting added.
-
- - `Proposals` with enough votes are merged (done manually for now using GitHub's UI).
-
- - Users recieve `points` (which are tokens) based on their merged contributions.
+ - A [MongoDB Atlas](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP) to store `users` and `proposals`. 
 
 ## To start the app
 
