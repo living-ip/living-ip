@@ -55,6 +55,9 @@ const summarizePullRequest = async (
 };
 
 export const getGithubUsername = async (githubAccessToken: string) => {
+  if (!githubAccessToken) {
+    throw new Error(`No GitHub access token provided`);
+  }
   const octokit = new Octokit({
     auth: githubAccessToken,
   });

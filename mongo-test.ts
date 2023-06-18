@@ -1,5 +1,5 @@
-import { log, stringify } from '$lib/functions';
-import { getMongoClient } from '$lib/server-utils';
+import { log, stringify } from './src/lib/functions';
+import { getMongoClient } from './src/lib/server-utils';
 
 const mongoClient = await getMongoClient();
 try {
@@ -63,15 +63,29 @@ try {
   // const documentCount = await proposalsCollection.countDocuments();
   // log(`${documentCount} proposals`);
 
-  const getUserForGithubUsername = (githubUsername: string) => {
-    const usersCollection = database.collection('users');
-    const userDocument = usersCollection.findOne({ githubUsername });
-    return userDocument;
-  };
+  const ASCENDING = 1;
 
-  const result = await getUserForGithubUsername('mikemaccana');
+  const result1 = await database.collection('proposals').createIndex({ url: ASCENDING }, { unique: true });
 
-  log(stringify(result));
+  log(stringify(result1));
+
+  // const result1 = await database.collection('users').createIndex({ walletAddress: ASCENDING }, { unique: true });
+
+  // log(stringify(result1));
+
+  // const result2 = await database.collection('users').createIndex({ githubUsername: ASCENDING }, { unique: true });
+
+  // log(stringify(result2));
+
+  // const getUserForGithubUsername = (githubUsername: string) => {
+  //   const usersCollection = database.collection('users');
+  //   const userDocument = usersCollection.findOne({ githubUsername });
+  //   return userDocument;
+  // };
+
+  // const result = await getUserForGithubUsername('mikemaccana');
+
+  // log(stringify(result));
 } catch (thrownObject) {
   const error = thrownObject as Error;
   if (error.message.includes('certificate validation failed')) {

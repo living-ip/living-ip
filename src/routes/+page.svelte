@@ -10,7 +10,7 @@
   import RewardSummary from '../components/RewardSummary.svelte';
   import Leaderboard from '../components/Leaderboard.svelte';
   import Reward from '../components/Reward.svelte';
-  import PullRequest from '../components/Proposal.svelte';
+  import Proposal from '../components/Proposal.svelte';
   import { log, stringify } from '../lib/functions';
   import { TOKEN_REWARD_PER_VALUE_UNIT } from '../lib/constants';
   const appName = `decentralized IP`;
@@ -34,7 +34,7 @@
     return walletAddressToNameAndProfilePicture(connection, publicKey);
   };
 
-  const updateFromGithub = async () => {
+  const refreshProposals = async () => {
     isLoading = true;
     const response = await http.get({
       url: '/api/v1/proposals',
@@ -67,7 +67,7 @@
     if (newValue?.publicKey) {
       log(`🚀 $walletStore.connected has updated!`, $walletStore.connected);
       // $walletStore.publicKey.toBase58(); now has our wallet address
-      updateFromGithub();
+      refreshProposals();
     }
   });
 
@@ -84,7 +84,7 @@
   });
 
   const refreshRepo = async () => {
-    await updateFromGithub();
+    await refreshProposals();
   };
 
   const getIndexOfTab = (tabName: string) => {
@@ -154,11 +154,13 @@
           <div class="pull-requests">
             {#each allUsersUnmergedPullRequestsWithVotes as pullRequestWithVotes}
               <!-- Do we show Solana users matching GitHub accounts? -->
-              <PullRequest
+              <Proposal
                 {pullRequestWithVotes}
-                walletAddress={$walletStore.publicKey.toBase58()}
+                {githubAccessToken}
+                currentUserWalletAddress={$walletStore.publicKey.toBase58()}
                 tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
                 symbol={SYMBOL}
+                afterVoting={refreshProposals}
               />
             {/each}
             <div />

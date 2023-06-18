@@ -1,28 +1,53 @@
 <script lang="ts">
   import type { PullRequestWithVotes } from '../types/types';
   import { stringify, log } from '../lib/functions';
+  import * as http from 'fetch-unfucked';
   import ProgressBar from './ProgressBar.svelte';
 
   export let pullRequestWithVotes: PullRequestWithVotes;
-  export let walletAddress: string;
+  export let currentUserWalletAddress: string;
+  export let githubAccessToken: string;
   export let tokenRewardPerValueUnit: number;
 
   export let symbol: string;
+
+  export let afterVoting: () => Promise<void>;
 
   let voteCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
 
   // TODO: hack. Should be based on total users
   const votesRequired = 2;
 
-  const currentUserVote = pullRequestWithVotes.votes?.[walletAddress] || null;
+  const currentUserVote = pullRequestWithVotes.votes?.[currentUserWalletAddress] || null;
 
-  const vote = (direction: boolean) => async () => {
+  const vote = (direction: boolean, url: string) => async () => {
     log('voting', direction);
     if (currentUserVote === direction) {
       log('already voted');
       return;
     }
-    // TODO: send vote to the server
+
+    log(`aboiut to vote`, {
+      direction,
+      url,
+      currentUserWalletAddress,
+      githubAccessToken,
+    });
+
+    const response = await http.post('/api/v1/proposals', null, {
+      direction,
+      url,
+      currentUserWalletAddress,
+      githubAccessToken,
+    });
+
+    if (response.status !== 'OK') {
+      throw new Error(`Got a bad response from the API: ${response.status}: ${response.body}`);
+    }
+
+    log(`response after voting`, response.status);
+
+    afterVoting();
   };
 </script>
 
@@ -47,8 +72,8 @@
     <ProgressBar {voteCount} {votesRequired} />
   </div>
   <div class="voting">
-    <button class="vote up" on:click={vote(true)} />
-    <button class="vote down" on:click={vote(false)} />
+    <button class="vote up" on:click={vote(true, pullRequestWithVotes.htmlURL)} />
+    <button class="vote down" on:click={vote(false, pullRequestWithVotes.htmlURL)} />
   </div>
 </div>
 

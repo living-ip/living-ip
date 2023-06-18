@@ -27,6 +27,10 @@ export interface SummarizedPullRequestWithUserDetails extends SummarizedPullRequ
   profilePicture: string | null;
 }
 
+export interface PullRequestWithVotes extends SummarizedPullRequestWithUserDetails {
+  votes: Record<string, boolean>;
+}
+
 export type OAuthCredentials = {
   accessToken: string;
   tokenType: string;
@@ -34,7 +38,3 @@ export type OAuthCredentials = {
   repoOwner: string;
   repo: string;
 };
-
-export interface PullRequestWithVotes extends SummarizedPullRequestWithUserDetails {
-  votes: Record<string, boolean>;
-}
