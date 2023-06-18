@@ -21,7 +21,9 @@
   let repoOwner: string | null = null;
   let repo: string | null = null;
 
-  let isLoading = true;
+  let showLoadingScreen = true;
+  let hasLoaded = false;
+
   let pullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
@@ -37,7 +39,11 @@
   };
 
   const refreshProposals = async () => {
-    isLoading = true;
+    // Only show the loading screen if we haven't loaded yet
+    if (!hasLoaded) {
+      showLoadingScreen = true;
+    }
+
     const response = await http.get({
       url: '/api/v1/proposals',
       params: {
@@ -64,7 +70,8 @@
 
     totalUsers = response.body.totalUsers;
 
-    isLoading = false;
+    showLoadingScreen = false;
+    hasLoaded = true;
   };
 
   walletStore.subscribe(async newValue => {
@@ -115,7 +122,7 @@
   {:else if !githubAccessToken}
     <h1>Login to github</h1>
     <a class="button github-login" href="/oauth">Login to github </a>
-  {:else if isLoading}
+  {:else if showLoadingScreen}
     <p>Loading Project</p>
   {:else}
     <div class="title-and-refresh">
