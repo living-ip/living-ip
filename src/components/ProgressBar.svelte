@@ -1,8 +1,8 @@
 <script lang="ts">
   export let voteCount: number;
-  export let votesRequired: number;
+  export let totalUsers: number;
 
-  const voteProgress = (100 / votesRequired) * voteCount;
+  const voteProgress = (100 / totalUsers) * voteCount;
 </script>
 
 <div class="progress-bar">

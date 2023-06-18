@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let total: number;
+  export let points: number;
   export let tokenRewardPerValueUnit: number;
   export let symbol: string;
 </script>
@@ -7,7 +7,7 @@
 <div class="reward-summary">
   <title>Total contributions</title>
   <div class="reward-summary-count-and-currency">
-    <div class="reward-token-count">{total * tokenRewardPerValueUnit}</div>
+    <div class="reward-token-count">{points * tokenRewardPerValueUnit}</div>
     <div class="reward-token-currency">{symbol}</div>
   </div>
 </div>

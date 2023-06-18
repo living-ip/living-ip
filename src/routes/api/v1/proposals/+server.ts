@@ -14,8 +14,8 @@ interface VoteStatus {
   userMergedPullRequestWithVotes: Array<PullRequestWithVotes>;
   allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes>;
   allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes>;
-  // TODO: rename, totaal *what* ?
-  total: number;
+  points: number;
+  totalUsers: number;
 }
 
 // http://localhost:5173/api/v1/proposals?walletAddress=5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM&githubAccessToken=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  }
@@ -78,7 +78,9 @@ const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddr
     pullRequest => pullRequest.user === user.githubUsername,
   );
 
-  const total = getTotalValue(userMergedPullRequestWithVotes);
+  const points = getTotalValue(userMergedPullRequestWithVotes);
+
+  const totalUsers = (await usersCollection.countDocuments()) as number;
 
   return {
     pullRequestsWithVotes,
@@ -86,7 +88,8 @@ const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddr
     userMergedPullRequestWithVotes,
     allUsersMergedPullRequestsWithVotes,
     allUsersUnmergedPullRequestsWithVotes,
-    total,
+    points,
+    totalUsers,
   };
 };
 

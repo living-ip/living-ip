@@ -8,17 +8,15 @@
   export let currentUserWalletAddress: string;
   export let githubAccessToken: string;
   export let tokenRewardPerValueUnit: number;
+  export let totalUsers: number;
 
   export let symbol: string;
 
   export let afterVoting: () => Promise<void>;
 
-  let voteCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
+  let voteUpCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
 
-  // TODO: hack. Should be based on total users
-  const votesRequired = 2;
-
-  const currentUserVote = pullRequestWithVotes.votes?.[currentUserWalletAddress] || null;
+  const currentUserVote = pullRequestWithVotes.votes?.[currentUserWalletAddress] ?? null;
 
   const vote = (direction: boolean, url: string) => async () => {
     log('voting', direction);
@@ -27,7 +25,7 @@
       return;
     }
 
-    log(`aboiut to vote`, {
+    log(`about to vote`, {
       direction,
       url,
       currentUserWalletAddress,
@@ -69,11 +67,17 @@
     <div class="reward">
       Contribution:&nbsp; <strong>{pullRequestWithVotes.value * tokenRewardPerValueUnit} {symbol}</strong>
     </div>
-    <ProgressBar {voteCount} {votesRequired} />
+    <ProgressBar voteCount={voteUpCount} {totalUsers} />
   </div>
   <div class="voting">
-    <button class="vote up" on:click={vote(true, pullRequestWithVotes.htmlURL)} />
-    <button class="vote down" on:click={vote(false, pullRequestWithVotes.htmlURL)} />
+    <button
+      class="vote up {currentUserVote === true ? 'active' : ''}"
+      on:click={vote(true, pullRequestWithVotes.htmlURL)}
+    />
+    <button
+      class="vote down {currentUserVote === false ? 'active' : ''}"
+      on:click={vote(false, pullRequestWithVotes.htmlURL)}
+    />
   </div>
 </div>
 
@@ -144,5 +148,11 @@
 
   .vote.down {
     background-image: url('/vote-down.svg');
+  }
+
+  .vote.active {
+    /* From https://codepen.io/sosuke/pen/Pjoqqp */
+    filter: invert(55%) sepia(85%) saturate(2867%) hue-rotate(159deg) brightness(91%) contrast(101%);
+    opacity: 1;
   }
 </style>

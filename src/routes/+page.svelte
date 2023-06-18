@@ -26,7 +26,9 @@
   let allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let userMergedPullRequestWithVotes: Array<PullRequestWithVotes> = [];
-  let total: number | null = null;
+  let points: number | null = null;
+
+  let totalUsers: number | null = null;
 
   const connection = $workSpace.connection;
 
@@ -58,7 +60,9 @@
 
     allUsersUnmergedPullRequestsWithVotes = response.body.allUsersUnmergedPullRequestsWithVotes;
 
-    total = response.body.total;
+    points = response.body.points;
+
+    totalUsers = response.body.totalUsers;
 
     isLoading = false;
   };
@@ -138,7 +142,7 @@
     {#if currentTab === getIndexOfTab('Voting')}
       <div class="reward-summary-and-proposals">
         <section class="rewards">
-          <RewardSummary {total} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
+          <RewardSummary {points} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
           <div class="merged-pull-requests">
             {#each userMergedPullRequestWithVotes as mergedPullRequest}
@@ -159,6 +163,7 @@
                 {githubAccessToken}
                 currentUserWalletAddress={$walletStore.publicKey.toBase58()}
                 tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
+                {totalUsers}
                 symbol={SYMBOL}
                 afterVoting={refreshProposals}
               />

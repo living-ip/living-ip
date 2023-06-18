@@ -1,6 +1,6 @@
 <script lang="ts">
   export let currentTab: number;
-  export let getIndexOfTab: () => number;
+  export let getIndexOfTab: (string: string) => number;
 </script>
 
 <div class="tabs">

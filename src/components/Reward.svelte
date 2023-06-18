@@ -12,7 +12,7 @@
     });
   };
 
-  const amount = mergedPullRequest.value * tokenRewardPerValueUnit;
+  const points = mergedPullRequest.value * tokenRewardPerValueUnit;
 </script>
 
 <div class="reward">
@@ -20,7 +20,7 @@
     <div class="date">{showDate(mergedPullRequest.mergedAt)}</div>
     <div class="title">{mergedPullRequest.title}</div>
   </div>
-  <div class="amount">{amount}</div>
+  <div class="amount">{points}</div>
 </div>
 
 <style>
