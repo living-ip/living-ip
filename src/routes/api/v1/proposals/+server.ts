@@ -18,20 +18,20 @@ import type {
 // Params
 // - walletAddress
 // - githubAccessToken
-export const GET = (async request => {
+export const GET = (async event => {
   log(`Handling GET request to /api/v1/proposals`);
 
-  const walletAddress = request.url.searchParams.get('walletAddress');
+  const walletAddress = event.url.searchParams.get('walletAddress');
   if (!walletAddress) {
     throw makeHTTPError(400, `No walletAddress found in request.url.searchParams`);
   }
 
-  const githubAccessToken = request.url.searchParams.get('githubAccessToken');
+  const githubAccessToken = event.url.searchParams.get('githubAccessToken');
   if (!githubAccessToken) {
     throw makeHTTPError(400, `No githubAccessToken found in request.url.searchParams`);
   }
 
-  const databaseOrNull = request.locals['database'] || null;
+  const databaseOrNull = event.locals['database'] || null;
   if (!databaseOrNull) {
     throw new Error(`No database found in request.locals`);
   }
