@@ -158,5 +158,7 @@
     /* From https://codepen.io/sosuke/pen/Pjoqqp */
     filter: invert(55%) sepia(85%) saturate(2867%) hue-rotate(159deg) brightness(91%) contrast(101%);
     opacity: 1;
+    /* Since the user has already voted this way they can't vote that way again */
+    cursor: revert;
   }
 </style>
