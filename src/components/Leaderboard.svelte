@@ -130,6 +130,10 @@
     padding: 6px;
   }
 
+  .wallet-name {
+    justify-items: left;
+  }
+
   .numeric {
     justify-items: end;
     text-align: right;
@@ -137,6 +141,6 @@
 
   .current-user {
     font-weight: 800;
-    background-color: hsla(0, 0%, 100%, 0.1);
+    background-color: hsla(0, 0%, 100%, 0.4);
   }
 </style>
