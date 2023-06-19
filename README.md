@@ -14,7 +14,7 @@ A [SvelteKit](https://kit.svelte.dev/) app, built with [create-svelte](https://g
 
  - Connection to GitHub using [OAuth](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps), and connection to GitHub repos using [GitHub API](https://docs.github.com/en/rest).
 
- - A [MongoDB Atlas](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP) to store `users` and `proposals`. 
+ - A [MongoDB](https://www.mongodb.com/developer/languages/javascript/node-connect-mongodb/) [Atlas](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP) to store `users` and `proposals`. 
 
 ## To start the app
 
