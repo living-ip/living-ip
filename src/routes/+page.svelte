@@ -100,7 +100,7 @@
   };
 
   const tabs = ['Voting', 'Leaderboard'];
-  let currentTab = 1;
+  let currentTab = 0;
 </script>
 
 <header>
