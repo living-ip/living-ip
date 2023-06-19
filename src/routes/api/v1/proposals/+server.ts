@@ -19,9 +19,13 @@ interface VoteStatus {
 
 // http://localhost:5173/api/v1/proposals?walletAddress=5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM&githubAccessToken=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  }
 
-const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddress: string): Promise<VoteStatus> => {
+const getVoteStatus = async (
+  githubAccessToken: string,
+  database: Db,
+  currentUserWalletAddress: string,
+): Promise<VoteStatus> => {
   const usersCollection = database.collection('users');
-  const user = await usersCollection.findOne({ walletAddress });
+  const currentUser = await usersCollection.findOne({ walletAddress: currentUserWalletAddress });
 
   // Quickly check out github credentials are valid
   try {
@@ -62,7 +66,7 @@ const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddr
   })) as Array<PullRequestWithVotes>;
 
   const userPullRequestsWithVotes: Array<PullRequestWithVotes> = pullRequestsWithVotes.filter(
-    pullRequest => pullRequest.user === user.githubUsername,
+    pullRequest => pullRequest.user === currentUser.githubUsername,
   );
 
   const allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = pullRequestsWithVotes.filter(
@@ -74,7 +78,7 @@ const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddr
   );
 
   const userMergedPullRequestWithVotes: Array<PullRequestWithVotes> = allUsersMergedPullRequestsWithVotes.filter(
-    pullRequest => pullRequest.user === user.githubUsername,
+    pullRequest => pullRequest.user === currentUser.githubUsername,
   );
 
   const points = getTotalValue(userMergedPullRequestWithVotes);
@@ -98,8 +102,8 @@ const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddr
 export const GET = (async event => {
   log(`Handling GET request to /api/v1/proposals`);
 
-  const walletAddress = event.url.searchParams.get('walletAddress');
-  if (!walletAddress) {
+  const currentUserWalletAddress = event.url.searchParams.get('walletAddress');
+  if (!currentUserWalletAddress) {
     throw makeHTTPError(400, `No walletAddress found in request.url.searchParams`);
   }
 
@@ -114,8 +118,7 @@ export const GET = (async event => {
   }
   const database = databaseOrNull as Db;
 
-  // Start with GitHub
-  const voteStatus = await getVoteStatus(githubAccessToken, database, walletAddress);
+  const voteStatus = await getVoteStatus(githubAccessToken, database, currentUserWalletAddress);
 
   return makeJSONResponse(voteStatus);
 }) satisfies RequestHandler;
