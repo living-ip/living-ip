@@ -2,21 +2,17 @@
 </script>
 
 <div class="title-and-refresh">
-  <title class="app-name-skeleton skeleton" />
+  <title class="app-name-skeleton skeleton box" />
 </div>
 
 <div class="tabs">
-  <div class="tab-skeleton skeleton" />
-  <div class="tab-skeleton skeleton" />
+  <div class="tab-skeleton skeleton box" />
+  <div class="tab-skeleton skeleton box" />
 </div>
 
 <div class="reward-summary-and-proposals">
-  <div class="rewards-skeleton skeleton" />
-  <div class="rewards-proposals-skeleton skeleton">
-    <div class="rewards-proposal-skeleton skeleton" />
-    <div class="rewards-proposal-skeleton skeleton" />
-    <div class="rewards-proposal-skeleton skeleton" />
-  </div>
+  <div class="rewards-skeleton skeleton box" />
+  <div class="rewards-proposals-skeleton skeleton box" />
 </div>
 
 <style>
@@ -40,6 +36,11 @@
     animation: skeleton-background-shine 1s infinite;
   }
 
+  .box {
+    background-color: #0000001a;
+    border-radius: 3px;
+  }
+
   .tabs {
     display: grid;
     grid-auto-flow: column;
@@ -51,8 +52,6 @@
   .tab-skeleton {
     width: 96px;
     height: 38px;
-    background-color: #e0e0e0;
-    border-radius: 3px;
   }
 
   .title-and-refresh {
@@ -65,8 +64,6 @@
   .app-name-skeleton {
     width: 162px;
     height: 28px;
-    background-color: #e0e0e0;
-    border-radius: 3px;
   }
 
   .reward-summary-and-proposals {
@@ -81,14 +78,10 @@
   .rewards-skeleton {
     width: 100%;
     height: 284px;
-    background-color: #e0e0e0;
-    border-radius: 3px;
   }
 
   .rewards-proposals-skeleton {
     width: 100%;
     height: 500px;
-    background-color: #e0e0e0;
-    border-radius: 3px;
   }
 </style>
