@@ -334,7 +334,7 @@
     padding: 12px;
     width: 100%;
     background: linear-gradient(45deg, #351a55, #9945ff);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6.67587px 25.869px -1.66897px rgb(83 37 255 / 43%);
   }
 
   .rewards {
