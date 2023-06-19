@@ -33,4 +33,20 @@ Then visit http://localhost:5173/ in your browser.
   
  - Accepting proposals (merges of PRs) are done manually using Github's UI for this PR. Likewise payouts are done manually for this MVP. We can build both these in future easily.
 
- 
+## Adding users
+
+ - Visit [the 'users' collection in MongoDB Atlas](https://cloud.mongodb.com/v2/5fdb6f434962ca502406e305#/metrics/replicaSet/6489c668ee3f4d382cd1005d/explorer/decentralizedIP/users/find)
+ - Click 'INSERT DOCUMENT' to make a user'
+ - Make a document with the following info:
+
+
+```json
+{
+  walletAddress: "5FHwkrdxntdK24hgQU8qgBjn35Y1zwhz1GZwCkP2UJnM",
+  githubUsername: "mikemaccana", 
+  walletName: "mikemaccana.sol",
+  profilePicture: "https://cdn.glow.app/g/er/ae01b288-3bc6-4248-ac49-a6b6c6132fb6",
+}
+```
+
+If someone doesn't have a wallet name or a profile picture you can skip them - it will fall back to showing the address if there's no name and an empty profile pic.
