@@ -246,11 +246,6 @@
     font-weight: 800;
     text-align: center;
     margin: 0;
-    /* From Solana brand book, ran through a vibrant gradient generator to get intermediate colors */
-    background: linear-gradient(90deg, #9945ff, #00c2ff, #14f195);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 
   header {
