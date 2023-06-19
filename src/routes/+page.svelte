@@ -7,7 +7,7 @@
   import type { UnfuckedResponse } from 'fetch-unfucked';
   import { walletStore } from '@portal-payments/wallet-adapter-core';
   import type { SummarizedPullRequestWithUserDetails, PullRequestWithVotes } from '../types/types';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import RewardSummary from '../components/RewardSummary.svelte';
   import Leaderboard from '../components/Leaderboard.svelte';
   import Reward from '../components/Reward.svelte';
@@ -37,6 +37,22 @@
 
   const walletAddressToNameAndProfilePictureWrapper = async (publicKey: PublicKey) => {
     return walletAddressToNameAndProfilePicture(connection, publicKey);
+  };
+
+  const optimisticUpdate = async (direction: boolean, url: string) => {
+    // An optimistic update is when we update the UI before we get a response from the server
+    // The changes to the UI are then reverted if the server responds with an error
+    log(`Doing optimistic update`);
+    const proposal = allUsersUnmergedPullRequestsWithVotes.find(pullRequest => pullRequest.htmlURL === url);
+    if (!proposal) {
+      throw new Error(`Could not find proposal during optimistic update for URL ${url}`);
+    }
+    proposal.votes = {
+      ...proposal.votes,
+      [$walletStore.publicKey.toBase58()]: direction,
+    };
+    allUsersUnmergedPullRequestsWithVotes = allUsersUnmergedPullRequestsWithVotes;
+    await tick();
   };
 
   const refreshProposals = async () => {
@@ -182,6 +198,7 @@
                 tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT}
                 {totalUsers}
                 symbol={SYMBOL}
+                {optimisticUpdate}
                 afterVoting={refreshProposals}
               />
             {/each}

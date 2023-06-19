@@ -13,6 +13,7 @@
   export let symbol: string;
 
   export let afterVoting: () => Promise<void>;
+  export let optimisticUpdate: (direction: boolean, url: string) => Promise<void>;
 
   $: voteUpCount = Object.values(pullRequestWithVotes.votes).filter(Boolean).length;
 
@@ -31,6 +32,9 @@
       currentUserWalletAddress,
       githubAccessToken,
     });
+
+    // Optimistic update - let's change the values in out local store immediately
+    await optimisticUpdate(direction, url);
 
     const response = await http.post('/api/v1/proposals', null, {
       direction,
