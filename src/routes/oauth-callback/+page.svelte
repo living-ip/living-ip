@@ -10,7 +10,7 @@
 
   onMount(() => {
     // Run only in the browser (where we can access localstorage)
-    log(`Saving accessToken to localStorage and redirectin back to home page...`);
+    log(`Saving accessToken to localStorage and redirecting back to home page...`);
     localStorage.setItem('githubAccessToken', accessToken);
     localStorage.setItem('repoOwner', repoOwner);
     localStorage.setItem('repo', repo);
