@@ -41,7 +41,7 @@
 
   const optimisticUpdate = async (direction: boolean, url: string) => {
     // An optimistic update is when we update the UI before we get a response from the server
-    // The changes to the UI are then reverted if the server responds with an error
+    // The changes to the UI are then reverted if the server responds with different data
     log(`Doing optimistic update`);
     const proposal = allUsersUnmergedPullRequestsWithVotes.find(pullRequest => pullRequest.htmlURL === url);
     if (!proposal) {
