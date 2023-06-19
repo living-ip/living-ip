@@ -94,7 +94,7 @@
   .leaderboard-card {
     gap: 12px;
     border-radius: 12px;
-    background: linear-gradient(45deg, #2f3d53, #659fad);
+    background: linear-gradient(45deg, #005b78, #02aee5);
     color: white;
     width: 100%;
     padding: 6px 12px;

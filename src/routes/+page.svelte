@@ -126,7 +126,7 @@
 
 <main>
   {#if !$walletStore?.connected}
-    <h1>Create together</h1>
+    <h1>Sign in with your Solana<br /> wallet to continue.</h1>
     <WalletMultiButton walletAddressToNameAndProfilePicture={walletAddressToNameAndProfilePictureWrapper} />
   {:else if !githubAccessToken}
     <h1>Login to github</h1>
@@ -230,6 +230,18 @@
     font-weight: 400;
   }
 
+  h1 {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 800;
+    text-align: center;
+    margin: 0;
+    /* From Solana brand book, ran through a vibrant gradient generator to get intermediate colors */
+    background: linear-gradient(90deg, #9945ff, #00c2ff, #14f195);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   header {
     height: 64px;
     grid-auto-flow: column;
@@ -288,7 +300,8 @@
   .app-name {
     width: 100%;
     justify-content: left;
-    font-size: 24px;
+    font-size: 32px;
+    font-weight: 600;
   }
 
   .reward-summary-and-proposals {
@@ -309,7 +322,7 @@
     border-radius: 12px;
     padding: 12px;
     width: 100%;
-    background: linear-gradient(45deg, #2f3d53, #659fad);
+    background: linear-gradient(45deg, #351a55, #9945ff);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
