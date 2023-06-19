@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let isActiveVoting: () => {};
-  export let isActiveLeaderboard: () => {};
+  export let isActiveVoting: boolean;
+  export let isActiveLeaderboard: boolean;
   export let setActiveVoting: () => {};
   export let setActiveLeaderboard: () => {};
 </script>
