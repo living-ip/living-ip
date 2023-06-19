@@ -48,7 +48,7 @@
     "avsc": "github:Bundlr-Network/avsc#csp-fixes",
     "buffer": "^6.0.3",
     "eventemitter3": "^4.0.7",
-    "fetch-unfucked": "^1.2.5",
+    "fetch-unfucked": "^1.2.8",
     "mongodb": "^5.6.0"
   }
 }

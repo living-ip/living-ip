@@ -4,6 +4,7 @@
   import { walletAddressToNameAndProfilePicture } from '@portal-payments/solana-wallet-names';
   import type { PublicKey } from '@solana/web3.js';
   import * as http from 'fetch-unfucked';
+  import type { UnfuckedResponse } from 'fetch-unfucked';
   import { walletStore } from '@portal-payments/wallet-adapter-core';
   import type { SummarizedPullRequestWithUserDetails, PullRequestWithVotes } from '../types/types';
   import { onMount } from 'svelte';
@@ -43,13 +44,24 @@
       showLoadingScreen = true;
     }
 
-    const response = await http.get({
-      url: '/api/v1/proposals',
-      params: {
-        walletAddress: $walletStore.publicKey.toBase58(),
-        githubAccessToken,
-      },
-    });
+    let response: UnfuckedResponse;
+    try {
+      response = await http.get({
+        url: '/api/v1/proposals',
+        params: {
+          walletAddress: $walletStore.publicKey.toBase58(),
+          githubAccessToken,
+        },
+      });
+    } catch (thrownObject) {
+      const error = thrownObject as Error;
+      if (error.message === 'Failed to fetch') {
+        // TODO: investigate why this happens
+        // it may be oauth credentails expiring but may be something else
+        log(`Recieved 'failed to fetch' message. Redirecting to /oauth`);
+        window.location.pathname = '/oauth';
+      }
+    }
 
     log('response is', response.body);
 
