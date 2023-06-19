@@ -15,7 +15,7 @@
   import Proposal from '../components/Proposal.svelte';
   import { log, stringify } from '../lib/functions';
   import { TOKEN_REWARD_PER_VALUE_UNIT } from '../lib/constants';
-  const appName = `decentralized IP`;
+  const appName = `Decentralized IP`;
 
   const SYMBOL = 'POINTS';
 
@@ -226,6 +226,7 @@
     padding: 0;
     margin: 0;
     font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #edfff8, #e9fffe);
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;

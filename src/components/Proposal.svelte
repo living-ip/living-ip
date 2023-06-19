@@ -109,7 +109,7 @@
 
   .name {
     font-size: 24px;
-    line-height: 36px;
+    line-height: 30px;
   }
 
   .reward {

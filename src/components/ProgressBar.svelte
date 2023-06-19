@@ -13,14 +13,14 @@
   .progress-bar {
     width: 100%;
     height: 8px;
-    background-color: #e5e5e5;
+    background-color: #11080826;
     border-radius: 4px;
     justify-items: left;
   }
 
   .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, rgb(44, 52, 110), #659fad);
+    background: linear-gradient(90deg, #00c2ff, #14f195);
     border-radius: 4px;
     transition: width 0.5s ease-in-out;
   }
