@@ -148,7 +148,7 @@
         <section class="rewards">
           <RewardSummary {points} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} symbol={SYMBOL} />
 
-          <div class="merged-pull-requests">
+          <div class="merged-proposals">
             {#each userMergedPullRequestWithVotes as mergedPullRequest}
               <Reward {mergedPullRequest} tokenRewardPerValueUnit={TOKEN_REWARD_PER_VALUE_UNIT} />
             {/each}
@@ -157,9 +157,9 @@
             {/if}
           </div>
         </section>
-        <section class="pull-requests">
+        <section class="proposals">
           <title>Current Proposals</title>
-          <div class="pull-requests">
+          <div class="proposals">
             {#each allUsersUnmergedPullRequestsWithVotes as pullRequestWithVotes}
               <!-- Do we show Solana users matching GitHub accounts? -->
               <Proposal
@@ -282,7 +282,7 @@
   .reward-summary-and-proposals {
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
-    gap: 64px;
+    gap: 32px;
     justify-items: left;
     align-items: start;
     width: 100%;
@@ -305,22 +305,25 @@
     justify-items: left;
   }
 
-  .merged-pull-requests {
+  .merged-proposals {
     padding-top: 24px;
     width: 100%;
   }
 
-  section.pull-requests {
+  section.proposals {
     width: 100%;
     gap: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    border-radius: 12px;
   }
 
-  div.pull-requests {
+  div.proposals {
     gap: 48px;
     width: 100%;
   }
 
-  .pull-requests title {
+  .proposals title {
     justify-items: left;
     width: 100%;
     font-size: 18px;
