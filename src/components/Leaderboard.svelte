@@ -63,7 +63,7 @@
   };
 </script>
 
-<div class="leaderboard-card">
+<section class="leaderboard-card">
   <div class="leaderboard">
     <div class="heading rank">Rank</div>
     <div class="heading wallet-name">User</div>
@@ -84,7 +84,7 @@
       </div>
     {/each}
   </div>
-</div>
+</section>
 
 <style>
   /* TODO: not sure why we need this, globals should be setting it for us */
@@ -94,13 +94,14 @@
   .leaderboard-card {
     gap: 12px;
     border-radius: 12px;
-    background: linear-gradient(180deg, #20362e 0%, #224234 100%);
+    background: linear-gradient(45deg, #2f3d53, #659fad);
     color: white;
     width: 100%;
     padding: 6px 12px;
     box-sizing: border-box;
     min-height: 300px;
     align-items: start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .leaderboard {

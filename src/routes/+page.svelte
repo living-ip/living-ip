@@ -298,6 +298,7 @@
     padding: 12px;
     width: 100%;
     background: linear-gradient(45deg, #2f3d53, #659fad);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .rewards {
@@ -313,7 +314,6 @@
   section.proposals {
     width: 100%;
     gap: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     padding: 12px;
     border-radius: 12px;
   }
