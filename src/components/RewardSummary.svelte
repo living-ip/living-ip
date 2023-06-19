@@ -17,6 +17,7 @@
     justify-items: left;
     grid-auto-flow: row;
     gap: 12px;
+    box-shadow: 0 6.67587px 25.869px -1.66897px rgb(83 37 255 / 43%);
   }
 
   .reward-summary title {

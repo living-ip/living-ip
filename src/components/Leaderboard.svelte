@@ -63,8 +63,8 @@
   };
 </script>
 
-<section class="leaderboard-card">
-  <div class="leaderboard">
+<section class="leaderboard">
+  <div class="leaderboard-results">
     <div class="heading rank">Rank</div>
     <div class="heading wallet-name">User</div>
     <div class="heading numeric week-points">1 week points</div>
@@ -91,7 +91,7 @@
   div {
     box-sizing: border-box;
   }
-  .leaderboard-card {
+  .leaderboard {
     gap: 12px;
     border-radius: 12px;
     background: linear-gradient(45deg, #005b78, #02aee5);
@@ -101,10 +101,10 @@
     box-sizing: border-box;
     min-height: 300px;
     align-items: start;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6.67587px 25.869px -1.66897px rgb(37 185 255 / 43%);
   }
 
-  .leaderboard {
+  .leaderboard-results {
     width: 100%;
     grid-template-columns: 0.5fr 1.2fr 1.4fr 1.4fr;
     grid-auto-flow: row;
