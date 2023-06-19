@@ -9,6 +9,7 @@
   import type { SummarizedPullRequestWithUserDetails, PullRequestWithVotes } from '../types/types';
   import { onMount, tick } from 'svelte';
   import RewardSummary from '../components/RewardSummary.svelte';
+  import Tabs from '../components/Tabs.svelte';
   import Leaderboard from '../components/Leaderboard.svelte';
   import Reward from '../components/Reward.svelte';
   import Skeleton from '../components/Skeleton.svelte';
@@ -155,22 +156,12 @@
       <title class="app-name">{repo}</title><button class="refresh" on:click={refreshRepo} />
     </div>
 
-    <div class="tabs">
-      <button
-        class="tab"
-        class:active={currentTab === getIndexOfTab('Voting')}
-        on:click={() => (currentTab = getIndexOfTab('Voting'))}
-      >
-        Voting
-      </button>
-      <button
-        class="tab"
-        class:active={currentTab === getIndexOfTab('Leaderboard')}
-        on:click={() => (currentTab = getIndexOfTab('Leaderboard'))}
-      >
-        Leaderboard
-      </button>
-    </div>
+    <Tabs
+      isActiveVoting={currentTab === getIndexOfTab('Voting')}
+      isActiveLeaderboard={currentTab === getIndexOfTab('Leaderboard')}
+      setActiveVoting={() => (currentTab = getIndexOfTab('Voting'))}
+      setActiveLeaderboard={() => (currentTab = getIndexOfTab('Leaderboard'))}
+    />
 
     {#if currentTab === getIndexOfTab('Voting')}
       <div class="reward-summary-and-proposals">
@@ -374,32 +365,5 @@
     font-size: 18px;
     font-weight: 800;
     text-transform: uppercase;
-  }
-
-  .tabs {
-    display: grid;
-    grid-auto-flow: column;
-    gap: 12px;
-    width: 100%;
-    justify-content: start;
-    border-bottom: 0.5px solid #222;
-  }
-
-  .tab {
-    width: 96px;
-    font-size: 16px;
-
-    text-transform: uppercase;
-    text-align: left;
-    justify-items: center;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-    padding: 12px 0;
-    gap: 12px;
-  }
-
-  .tab.active {
-    font-weight: 600;
   }
 </style>
