@@ -18,13 +18,17 @@
     width: 100%;
     justify-content: start;
     border-bottom: 0.5px solid #222;
+
+    font-family: 'Inter', sans-serif;
   }
 
   .tab {
     width: 96px;
-    font-size: 16px;
 
+    font-size: 16px;
+    font-weight: 500;
     text-transform: uppercase;
+
     text-align: left;
     justify-items: center;
     border: none;
@@ -32,9 +36,11 @@
     background-color: transparent;
     padding: 12px 0;
     gap: 12px;
+    opacity: 0.5;
   }
 
   .tab.active {
-    font-weight: 600;
+    font-weight: 700;
+    opacity: 0.9;
   }
 </style>
