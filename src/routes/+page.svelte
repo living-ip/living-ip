@@ -24,7 +24,6 @@
   let showLoadingScreen = true;
   let hasLoaded = false;
 
-  let pullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let allUsersUnmergedPullRequestsWithVotes: Array<PullRequestWithVotes> = [];
   let userMergedPullRequestWithVotes: Array<PullRequestWithVotes> = [];
@@ -57,8 +56,6 @@
     if (response.status !== 'OK') {
       throw Error(`Error from Decentralized IP API: ${response.status}: ${response.body}`);
     }
-
-    pullRequestsWithVotes = response.body.pullRequestsWithVotes;
 
     userMergedPullRequestWithVotes = response.body.userMergedPullRequestWithVotes;
 

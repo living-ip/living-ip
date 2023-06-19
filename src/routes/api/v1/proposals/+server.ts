@@ -9,7 +9,6 @@ import { getTotalValue } from '$lib/utils';
 import type { PullRequestWithVotes, SummarizedPullRequestWithUserDetails } from '../../../../types/types';
 
 interface VoteStatus {
-  pullRequestsWithVotes: Array<PullRequestWithVotes>;
   userPullRequestsWithVotes: Array<PullRequestWithVotes>;
   userMergedPullRequestWithVotes: Array<PullRequestWithVotes>;
   allUsersMergedPullRequestsWithVotes: Array<PullRequestWithVotes>;
@@ -83,7 +82,6 @@ const getVoteStatus = async (githubAccessToken: string, database: Db, walletAddr
   const totalUsers = (await usersCollection.countDocuments()) as number;
 
   return {
-    pullRequestsWithVotes,
     userPullRequestsWithVotes,
     userMergedPullRequestWithVotes,
     allUsersMergedPullRequestsWithVotes,
