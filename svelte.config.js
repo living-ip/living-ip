@@ -1,12 +1,9 @@
 import preprocess from 'svelte-preprocess';
-import adapter from '@sveltejs/adapter-static';
 
 const config = {
   preprocess: preprocess(),
 
-  kit: {
-    adapter: adapter(),
-  },
+  kit: {},
 
   // Fix https://stackoverflow.com/questions/74974066/visible-non-interactive-elements-with-an-onclick-event-must-be-accompanied-by
   onwarn: (warning, handler) => {
